@@ -22,7 +22,7 @@ defmodule Litmus.MixProject do
         extras: ["README.md"]
       ],
       package: [
-        maintainers: ["Shraddha Sharma"],
+        maintainers: ["Lob"],
         licenses: ["MIT"],
         links: %{
           "GitHub" => @github_url,
