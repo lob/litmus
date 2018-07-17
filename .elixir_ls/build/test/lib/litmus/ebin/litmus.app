@@ -1,6 +1,6 @@
 {application,litmus,
              [{applications,[kernel,stdlib,elixir,logger]},
-              {description,"litmus"},
+              {description,"Data schema validation in elixir"},
               {modules,['Elixir.Litmus']},
               {registered,[]},
               {vsn,"0.1.0"},

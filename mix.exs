@@ -1,13 +1,33 @@
 defmodule Litmus.MixProject do
   use Mix.Project
 
+  @github_url "https://github.com/shraddha1704/litmus"
+
   def project do
     [
       app: :litmus,
       version: "0.1.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "litmus",
+      description: "Data schema validation in elixir",
+      source_url: @github_url,
+      homepage_url: @github_url,
+      files: ~w(mix.exs lib LICENSE.md README.md CHANGELOG.md),
+      docs: [
+        main: "litmus",
+        extras: ["README.md"]
+      ],
+      package: [
+        maintainers: ["Shraddha Sharma"],
+        licenses: ["MIT"],
+        links: %{
+          "GitHub" => @github_url,
+        }
+      ]
     ]
   end
 
@@ -21,8 +41,7 @@ defmodule Litmus.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false}
     ]
   end
 end
