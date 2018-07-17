@@ -1,8 +1,6 @@
 # Litmus
 
-![Hex.pm](https://img.shields.io/hexpm/v/lazy_agent.svg)
-
-Data Schema validation in Elixir
+Data validation in Elixir
 
 ## Installation
 
