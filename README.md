@@ -1,6 +1,8 @@
 # Litmus
 
-**TODO: Add description**
+![Hex.pm](https://img.shields.io/hexpm/v/lazy_agent.svg)
+
+Data Schema validation in Elixir
 
 ## Installation
 
