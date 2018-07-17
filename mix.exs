@@ -1,7 +1,7 @@
 defmodule Litmus.MixProject do
   use Mix.Project
 
-  @github_url "https://github.com/shraddha1704/litmus"
+  @github_url "https://github.com/lob/litmus"
 
   def project do
     [
