@@ -10,7 +10,7 @@ defmodule Litmus.MixProject do
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      dialyzer: [plt_add_deps: :apps_direct, plt_add_apps: [:wx]],
+      dialyzer: [plt_add_deps: :apps_direct],
 
       # Docs
       name: "litmus",
@@ -34,8 +34,7 @@ defmodule Litmus.MixProject do
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         "coveralls": :test,
-        "coveralls.detail": :test,
-        "coveralls.post": :test,
+        "coveralls.travis": :test,
         "coveralls.html": :test
       ]
     ]
