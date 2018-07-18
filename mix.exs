@@ -10,6 +10,7 @@ defmodule Litmus.MixProject do
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      dialyzer: [plt_add_deps: :apps_direct],
 
       # Docs
       name: "litmus",
@@ -18,7 +19,7 @@ defmodule Litmus.MixProject do
       homepage_url: @github_url,
       files: ~w(mix.exs lib LICENSE.md README.md CHANGELOG.md),
       docs: [
-        main: "litmus",
+        main: "Litmus",
         extras: ["README.md"]
       ],
       package: [
@@ -27,6 +28,14 @@ defmodule Litmus.MixProject do
         links: %{
           "GitHub" => @github_url,
         }
+      ],
+
+      #ExCoveralls
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        "coveralls": :test,
+        "coveralls.travis": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -41,7 +50,10 @@ defmodule Litmus.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
+      {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.8", only: :test},
+      {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false}
     ]
   end
 end
