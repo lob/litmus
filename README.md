@@ -1,6 +1,6 @@
 # Litmus
 
-**TODO: Add description**
+Data validation in Elixir
 
 ## Installation
 
