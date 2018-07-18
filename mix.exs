@@ -19,7 +19,7 @@ defmodule Litmus.MixProject do
       homepage_url: @github_url,
       files: ~w(mix.exs lib LICENSE.md README.md CHANGELOG.md),
       docs: [
-        main: "litmus",
+        main: "Litmus",
         extras: ["README.md"]
       ],
       package: [
