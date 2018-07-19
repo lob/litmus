@@ -3,11 +3,9 @@ defmodule Litmus.Type.Any do
   Schema and validation for Any data type.
   """
 
-  defstruct [
-    required: false
-  ]
+  defstruct required: false
 
   @type t :: %__MODULE__{
-    required: boolean
-  }
+          required: boolean
+        }
 end

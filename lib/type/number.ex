@@ -11,9 +11,9 @@ defmodule Litmus.Type.Number do
   ]
 
   @type t :: %__MODULE__{
-    min: non_neg_integer,
-    max: non_neg_integer,
-    integer: boolean,
-    required: boolean
-  }
+          min: non_neg_integer,
+          max: non_neg_integer,
+          integer: boolean,
+          required: boolean
+        }
 end
