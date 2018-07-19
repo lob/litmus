@@ -26,14 +26,14 @@ defmodule Litmus.MixProject do
         maintainers: ["Lob"],
         licenses: ["MIT"],
         links: %{
-          "GitHub" => @github_url,
+          "GitHub" => @github_url
         }
       ],
 
-      #ExCoveralls
+      # ExCoveralls
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        "coveralls": :test,
+        coveralls: :test,
         "coveralls.travis": :test,
         "coveralls.html": :test
       ]
