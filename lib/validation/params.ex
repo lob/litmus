@@ -9,7 +9,7 @@ defmodule Litmus.Validation.Params do
   def check_additional_params_error(data, schema) do
     result = Map.keys(data) -- Map.keys(schema)
 
-    if length(result) == 0 do
+    if result == [] do
       {:ok, nil}
     else
       additional_params = Enum.join(result, ",")
