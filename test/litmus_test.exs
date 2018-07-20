@@ -11,8 +11,7 @@ defmodule LitmusTest do
       username: %Type.String{
         min_length: 3,
         max_length: 15,
-        regex: "^[a-zA-Z0-9_]+$",
-        required: true
+        regex: "^[a-zA-Z0-9_]+$"
       },
       num_of_accounts: %Type.Number{
         min: 0,
@@ -29,8 +28,7 @@ defmodule LitmusTest do
       id: "1"
     }
 
-    result = Litmus.validate(req_params, login_schema)
-    assert result == {:ok, req_params}
+    assert Litmus.validate(req_params, login_schema) == {:ok, req_params}
   end
 
   test "return error when an additional parameter is passed" do
@@ -45,7 +43,7 @@ defmodule LitmusTest do
       abc: true
     }
 
-    result = Litmus.validate(req_params, login_schema)
-    assert result == {:error, "The data has following additional parameters: abc"}
+    assert Litmus.validate(req_params, login_schema) ==
+             {:error, "The data has following additional parameters: abc"}
   end
 end

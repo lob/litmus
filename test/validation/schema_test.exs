@@ -29,7 +29,6 @@ defmodule Litmus.Validation.SchemaTest do
       id: "1"
     }
 
-    result = Schema.check_schema_error(req_params, login_schema)
-    assert result == {:ok, req_params}
+    assert Schema.check_schema_error(req_params, login_schema) == {:ok, req_params}
   end
 end
