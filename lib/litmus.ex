@@ -33,12 +33,9 @@ defmodule Litmus do
 
   @spec validate(map, map) :: tuple
   def validate(data, schema) do
-    additional_params_error = Params.check_additional_params_error(data, schema)
-
-    if {:ok, nil} == additional_params_error do
-      Schema.check_schema_error(data, schema)
-    else
-      additional_params_error
+    case Params.check_additional_params_error(data, schema) do
+      {:ok, nil} -> Schema.check_schema_error(data, schema)
+      error = {:error, _} -> error
     end
   end
 end
