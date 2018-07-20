@@ -10,7 +10,7 @@ defmodule Litmus.MixProject do
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      dialyzer: [plt_add_deps: :apps_direct],
+      dialyzer: [plt_add_deps: :apps_direct, ignore_warnings: ".dialyzer_ignore"],
 
       # Docs
       name: "litmus",

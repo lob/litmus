@@ -1,0 +1,11 @@
+Unknown function 'Elixir.Litmus.Type.Atom':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.BitString':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.Float':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.Function':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.Integer':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.List':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.Map':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.PID':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.Port':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.Reference':'__impl__'/1
+Unknown function 'Elixir.Litmus.Type.Tuple':'__impl__'/1

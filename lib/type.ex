@@ -1,9 +1,9 @@
 defprotocol Litmus.Type do
   @moduledoc false
 
-  alias Litmus.Type.{Any, Boolean, Number, String}
+  alias Litmus.Type
 
-  @type t :: %Any{} | %Boolean{} | %Number{} | %String{}
+  @type t :: %Type.Any{} | %Type.Boolean{} | %Type.Number{} | %Type.String{}
 
   @doc "validates the data based on the type"
   @spec validate(t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
