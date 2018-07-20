@@ -1,8 +1,49 @@
 defmodule LitmusTest do
   use ExUnit.Case
-  doctest Litmus
 
-  test "greets the world" do
-    assert Litmus.hello() == :world
+  alias Litmus.Type
+
+  test "validate schema" do
+    login_schema = %{
+      "id": %Type.Any{
+        "required": true
+      },
+      "username": %Type.String{
+        "min_length": 3,
+        "max_length": 15,
+        "regex": "^[a-zA-Z0-9_]+$",
+        "required": true
+      },
+      "num_of_accounts": %Type.Number{
+        "min": 0,
+        "max": 10,
+        "integer": true
+      },
+      "feature_flag": %Type.Boolean{
+        "truthy": ["yes", "1"],
+        "falsy": ["no", "0"]
+      }
+    }
+
+    req_params = %{
+      "id": "1"
+    }
+    result = Litmus.validate(req_params, login_schema)
+    assert result == {:ok, req_params}
+  end
+
+  test "return error when an additional parameter is passed" do
+    login_schema = %{
+      "id": %Type.Any{
+        "required": true
+      }
+    }
+
+    req_params = %{
+      "id": "1",
+      "abc": true
+    }
+    result = Litmus.validate(req_params, login_schema)
+    assert result == {:error, "The data has following additional parameters: abc"}
   end
 end
