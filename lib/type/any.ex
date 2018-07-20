@@ -9,3 +9,12 @@ defmodule Litmus.Type.Any do
           required: boolean
         }
 end
+
+defimpl Litmus.Type, for: Litmus.Type.Any do
+  alias Litmus.Type
+
+  @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
+  def validate(_type, _field, data) do
+    {:ok, data}
+  end
+end
