@@ -15,7 +15,7 @@ defmodule Litmus.Validation.ParamsTest do
       id: "1"
     }
 
-    assert Params.check_additional_params_error(req_params, login_schema) == {:ok, nil}
+    assert Params.validate_allowed_params(req_params, login_schema) == {:ok, nil}
   end
 
   test "return error when an additional parameter is passed" do
@@ -30,7 +30,7 @@ defmodule Litmus.Validation.ParamsTest do
       abc: true
     }
 
-    assert Params.check_additional_params_error(req_params, login_schema) ==
+    assert Params.validate_allowed_params(req_params, login_schema) ==
              {:error, "The data has following additional parameters: abc"}
   end
 end

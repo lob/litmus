@@ -5,8 +5,8 @@ defmodule Litmus.Validation.Params do
   Module for checking if data consists of parameters that have not been defined in schema
   """
 
-  @spec check_additional_params_error(map, map) :: tuple
-  def check_additional_params_error(data, schema) do
+  @spec validate_allowed_params(map, map) :: tuple
+  def validate_allowed_params(data, schema) do
     result = Map.keys(data) -- Map.keys(schema)
 
     if result == [] do

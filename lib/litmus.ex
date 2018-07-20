@@ -33,7 +33,7 @@ defmodule Litmus do
 
   @spec validate(map, map) :: tuple
   def validate(data, schema) do
-    case Params.check_additional_params_error(data, schema) do
+    case Params.validate_allowed_params(data, schema) do
       {:ok, nil} -> Schema.check_schema_error(data, schema)
       error = {:error, _} -> error
     end
