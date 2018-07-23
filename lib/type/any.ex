@@ -1,7 +1,5 @@
 defmodule Litmus.Type.Any do
-  @moduledoc """
-  Schema and validation for Any data type.
-  """
+  @moduledoc false
 
   defstruct required: false
 
@@ -23,16 +21,14 @@ defmodule Litmus.Type.Any do
   def add_required_errors(_params, field, %Litmus.Type.Any{required: _}) do
     {:error, "Incorrect schema defined for #{field}"}
   end
-end
 
-defimpl Litmus.Type, for: Litmus.Type.Any do
-  alias Litmus.Type
+  @spec validate_keys(map, binary, t) :: {:ok, map} | {:error, String.t()}
+  def validate_keys(data, field, type), do: add_required_errors(data, field, type)
 
-  @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
-  def validate(type, field, data) do
-    case Type.Any.add_required_errors(data, field, type) do
-      {:ok, data} -> {:ok, data}
-      {:error, msg} -> {:error, msg}
-    end
+  defimpl Litmus.Type do
+    alias Litmus.Type
+
+    @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
+    def validate(type, field, data), do: Type.Any.validate_keys(data, field, type)
   end
 end

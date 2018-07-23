@@ -1,20 +1,5 @@
 defmodule Litmus do
-  @moduledoc """
-  Documentation for Litmus. Validate data against a defined schema.
-
-  ## Examples
-
-      iex> schema = %{"id": %Litmus.Type.Any{"required": true}}
-      iex> params = %{"id": 1}
-      iex> Litmus.validate(params, schema)
-      {:ok, %{id: 1}}
-
-      iex> schema = %{"id": %Litmus.Type.Any{}}
-      iex> params = %{"password": 1}
-      iex> Litmus.validate(params, schema)
-      {:error, "password is not allowed"}
-
-  """
+  @moduledoc File.read!("#{__DIR__}/../README.md")
 
   alias Litmus.Type
 
@@ -29,6 +14,7 @@ defmodule Litmus do
     end
   end
 
+  @doc false
   @spec validate_allowed_params(map, map) :: :ok | {:error, String.t()}
   defp validate_allowed_params(data, schema) do
     result = Map.keys(data) -- Map.keys(schema)
@@ -39,6 +25,7 @@ defmodule Litmus do
     end
   end
 
+  @doc false
   @spec validate_schema(map, map) :: {:ok, map} | {:error, String.t()}
   def validate_schema(data, schema) do
     Enum.reduce_while(schema, data, fn {field, type}, modified_data ->

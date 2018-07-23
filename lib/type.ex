@@ -3,7 +3,7 @@ defprotocol Litmus.Type do
 
   alias Litmus.Type
 
-  @type t :: %Type.Any{} | %Type.Boolean{} | %Type.Number{} | %Type.String{}
+  @type t :: Type.Any.t() | Type.Boolean.t() | Type.Number.t() | Type.String.t()
 
   @spec validate(t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate(type, field, data)

@@ -3,6 +3,34 @@ defmodule Litmus.Type.AnyTest do
 
   alias Litmus.Type
 
+  test "tests protocol implementation for Any data type" do
+    type = %Type.Any{
+      required: true
+    }
+
+    field = :id
+
+    data = %{
+      id: "1"
+    }
+
+    assert Type.validate(type, field, data) == {:ok, data}
+  end
+
+  test "tests validate_keys function for Any data type" do
+    type = %Type.Any{
+      required: true
+    }
+
+    field = :id
+
+    data = %{
+      id: "1"
+    }
+
+    assert Type.Any.validate_keys(data, field, type) == {:ok, data}
+  end
+
   test "returns ok when field is required and is present in params" do
     field = :id
 
