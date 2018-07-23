@@ -17,10 +17,6 @@ end
 
 ## Usage
 
-Validate data against a defined schema.
-
-* `Litmus.validate/2`
-
 If the data is valid, the function returns {:ok, data}. The data returned will be coerced according to the schema defined.
 
 If the data passed does not follow the rules defined in the schema, the function returns {:error, error_message}. It will also return error, in case we have a field in data, whose rule is not defined in the schema.
@@ -39,14 +35,16 @@ iex> Litmus.validate(params, schema)
 
 Currently, we support the following data types:
 
-* [**Any**](#any)
+* [**Any**](#litmus.type.any)
 
 ## Data Types Supported
 
-# any
+# Litmus.Type.Any
 
-It will contain functions which will be common to all data types. It supports the following functions:
+It will contain options that will be common to all data types. It supports the following options:
   * *Required*
+
+  Allowed values are boolean `true` and `false`. The default value of `required` is set to `false`.
 
 ```
 iex> schema = %{"id": %Litmus.Type.Any{"required": true}}
@@ -54,20 +52,10 @@ iex> params = %{"id": 1}
 iex> Litmus.validate(params, schema)
 {:ok, %{id: 1}}
 
-iex> schema = %{"id": %Litmus.Type.Any{}}
-iex> params = %{}
-iex> Litmus.validate(params, schema)
-{:ok, %{}}
-
 iex> schema = %{"id": %Litmus.Type.Any{"required": true}}
 iex> params = %{}
 iex> Litmus.validate(params, schema)
 {:error, "id is required"}
-
-iex> schema = %{"id": %Litmus.Type.Any{"required": "true"}}
-iex> params = %{"id": 1}
-iex> Litmus.validate(params, schema)
-{:error, "Any.required must be a boolean"}
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
