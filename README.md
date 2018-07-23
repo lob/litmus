@@ -21,7 +21,7 @@ Validate data against a defined schema.
 
 * `Litmus.validate/2`
 
-If the data is valid, the function returns {:ok, data}. The data returned willbe coerced according to the schema defined.
+If the data is valid, the function returns {:ok, data}. The data returned will be coerced according to the schema defined.
 
 If the data passed does not follow the rules defined in the schema, the function returns {:error, error_message}. It will also return error, in case we have a field in data, whose rule is not defined in the schema.
 
