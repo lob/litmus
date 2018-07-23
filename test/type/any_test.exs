@@ -81,6 +81,6 @@ defmodule Litmus.Type.AnyTest do
     }
 
     assert Type.Any.add_required_errors(params, field, type) ==
-             {:error, "Incorrect schema defined for #{field}"}
+             {:error, "Any.required must be a boolean"}
   end
 end

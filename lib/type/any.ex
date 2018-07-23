@@ -18,8 +18,8 @@ defmodule Litmus.Type.Any do
 
   def add_required_errors(params, _field, %Litmus.Type.Any{required: false}), do: {:ok, params}
 
-  def add_required_errors(_params, field, %Litmus.Type.Any{required: _}) do
-    {:error, "Incorrect schema defined for #{field}"}
+  def add_required_errors(_params, _field, %Litmus.Type.Any{required: _}) do
+    {:error, "Any.required must be a boolean"}
   end
 
   @spec validate_keys(map, binary, t) :: {:ok, map} | {:error, String.t()}

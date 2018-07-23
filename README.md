@@ -67,7 +67,7 @@ iex> Litmus.validate(params, schema)
 iex> schema = %{"id": %Litmus.Type.Any{"required": "true"}}
 iex> params = %{"id": 1}
 iex> Litmus.validate(params, schema)
-{:error, "Incorrect schema defined for id"}
+{:error, "Any.required must be a boolean"}
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
