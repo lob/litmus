@@ -1,6 +1,6 @@
 defmodule Litmus do
   @moduledoc """
-  Documentation for Litmus. Validate data against schema defined.
+  Documentation for Litmus. Validate data against a defined schema.
 
   ## Examples
 
@@ -25,7 +25,7 @@ defmodule Litmus do
   def validate(data, schema) do
     case validate_allowed_params(data, schema) do
       :ok -> validate_schema(data, schema)
-      error = {:error, _} -> error
+      {:error, msg} -> {:error, msg}
     end
   end
 
