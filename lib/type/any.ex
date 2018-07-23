@@ -7,6 +7,9 @@ defmodule Litmus.Type.Any do
           required: boolean
         }
 
+  @spec validate_keys(map, binary, t) :: {:ok, map} | {:error, String.t()}
+  def validate_keys(data, field, type), do: add_required_errors(data, field, type)
+
   @spec add_required_errors(map, binary, t) :: {:ok, map} | {:error, String.t()}
   def add_required_errors(params, field, %Litmus.Type.Any{required: true}) do
     if Map.has_key?(params, field) do
@@ -21,9 +24,6 @@ defmodule Litmus.Type.Any do
   def add_required_errors(_params, _field, %Litmus.Type.Any{required: _}) do
     {:error, "Any.required must be a boolean"}
   end
-
-  @spec validate_keys(map, binary, t) :: {:ok, map} | {:error, String.t()}
-  def validate_keys(data, field, type), do: add_required_errors(data, field, type)
 
   defimpl Litmus.Type do
     alias Litmus.Type

@@ -27,7 +27,7 @@ defmodule Litmus do
 
   @doc false
   @spec validate_schema(map, map) :: {:ok, map} | {:error, String.t()}
-  def validate_schema(data, schema) do
+  defp validate_schema(data, schema) do
     Enum.reduce_while(schema, data, fn {field, type}, modified_data ->
       case Type.validate(type, field, modified_data) do
         {:error, msg} ->
