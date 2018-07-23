@@ -14,7 +14,6 @@ defmodule Litmus do
     end
   end
 
-  @doc false
   @spec validate_allowed_params(map, map) :: :ok | {:error, String.t()}
   defp validate_allowed_params(data, schema) do
     result = Map.keys(data) -- Map.keys(schema)
@@ -25,7 +24,6 @@ defmodule Litmus do
     end
   end
 
-  @doc false
   @spec validate_schema(map, map) :: {:ok, map} | {:error, String.t()}
   defp validate_schema(data, schema) do
     Enum.reduce_while(schema, data, fn {field, type}, modified_data ->
