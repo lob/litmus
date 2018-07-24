@@ -1,20 +1,21 @@
 defmodule Litmus.Type.Any do
-  @moduledoc """
-  Schema and validation for Any data type.
-  """
+  @moduledoc false
+
+  alias Litmus.Required
 
   defstruct required: false
 
   @type t :: %__MODULE__{
           required: boolean
         }
-end
 
-defimpl Litmus.Type, for: Litmus.Type.Any do
-  alias Litmus.Type
+  @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
+  def validate_field(type, field, data), do: Required.validate(type, field, data)
 
-  @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
-  def validate(_type, _field, data) do
-    {:ok, data}
+  defimpl Litmus.Type do
+    alias Litmus.Type
+
+    @spec validate(Type.t(), binary, map) :: {:ok, map} | {:error, binary}
+    def validate(type, field, data), do: Type.Any.validate_field(type, field, data)
   end
 end
