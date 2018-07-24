@@ -35,11 +35,11 @@ iex> Litmus.validate(params, schema)
 
 Currently, we support the following data types:
 
-* [**Any**](#litmus.type.any)
+* [**Any**](#module-litmus-type-any)
 
 ## Data Types Supported
 
-# Litmus.Type.Any
+### Litmus.Type.Any
 
 It will contain options that will be common to all data types. It supports the following options:
   * *Required*
