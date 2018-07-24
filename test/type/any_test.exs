@@ -3,7 +3,7 @@ defmodule Litmus.Type.AnyTest do
 
   alias Litmus.Type
 
-  test "tests protocol implementation for Any data type" do
+  test "validates data through Type module" do
     type = %Type.Any{
       required: true
     }
@@ -17,7 +17,7 @@ defmodule Litmus.Type.AnyTest do
     assert Type.validate(type, field, data) == {:ok, data}
   end
 
-  test "tests validate_keys function for Any data type" do
+  test "validates properties of Any schema in Type.Any module" do
     type = %Type.Any{
       required: true
     }

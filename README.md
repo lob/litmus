@@ -43,7 +43,7 @@ Currently, we support the following data types:
 
 ### Litmus.Type.Any
 
-It will contain options that will be common to all data types. It supports the following options:
+The `Any` module contains options that will be common to all data types. It supports the following options:
   * *Required*
 
   Allowed values are boolean `true` and `false`. The default value of `required` is set to `false`.

@@ -5,8 +5,6 @@ defmodule Litmus.RequiredTest do
   alias Litmus.Type
 
   test "returns ok when field is required and is present in params" do
-    field = :id
-
     type = %Type.Any{
       required: true
     }
@@ -15,7 +13,7 @@ defmodule Litmus.RequiredTest do
       id: "1"
     }
 
-    assert Required.validate(type, field, params) == {:ok, params}
+    assert Required.validate(type, :id, params) == {:ok, params}
   end
 
   test "returns error when field is required and not present in params" do
