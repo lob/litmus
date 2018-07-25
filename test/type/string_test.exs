@@ -102,6 +102,6 @@ defmodule Litmus.Type.StringTest do
     }
 
     assert Type.String.length_validate(type, field, data) ==
-             {:error, "#{field} length must be equal to #{length} characters long"}
+             {:error, "#{field} length must be #{length} characters long"}
   end
 end

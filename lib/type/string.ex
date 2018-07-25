@@ -74,7 +74,7 @@ defmodule Litmus.Type.String do
       if String.length(params[field]) == length do
         {:ok, params}
       else
-        {:error, "#{field} length must be equal to #{length} characters long"}
+        {:error, "#{field} length must be #{length} characters long"}
       end
     else
       {:ok, params}
