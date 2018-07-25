@@ -5,8 +5,8 @@ defmodule Litmus.Type.AnyTest do
 
   describe "Type.validate/3" do
     test "validates data through Type module" do
-      field = :id
-      data = %{id: "1"}
+      field = "id"
+      data = %{"id" => "1"}
 
       type = %Type.Any{
         required: true
@@ -18,8 +18,8 @@ defmodule Litmus.Type.AnyTest do
 
   describe "validate_field/3" do
     test "validates property values of data based on their Any schema definition in Type.Any module" do
-      field = :id
-      data = %{id: "1"}
+      field = "id"
+      data = %{"id" => "1"}
 
       type = %Type.Any{
         required: true

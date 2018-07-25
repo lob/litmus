@@ -24,13 +24,13 @@ If the data is valid, the function returns `{:ok, data}`. The data returned will
 If the data passed does not follow the rules defined in the schema, the function returns `{:error, error_message}`. It will also return an error when receiving a field that has not been specified in the provided schema.
 
 ```elixir
-iex> schema = %{id: %Litmus.Type.Any{required: true}}
-iex> params = %{id: 1}
+iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
+iex> params = %{"id" => 1}
 iex> Litmus.validate(params, schema)
-{:ok, %{id: 1}}
+{:ok, %{"id" => 1}}
 
-iex> schema = %{id: %Litmus.Type.Any{}}
-iex> params = %{password: 1}
+iex> schema = %{"id" => %Litmus.Type.Any{}}
+iex> params = %{"password" =>  1}
 iex> Litmus.validate(params, schema)
 {:error, "password is not allowed"}
 ```
@@ -49,12 +49,12 @@ The `Any` module contains options that will be common to all data types. It supp
   Allowed values are boolean `true` and `false`. The default value of `required` is set to `false`.
 
 ```
-iex> schema = %{id: %Litmus.Type.Any{required: true}}
-iex> params = %{id: 1}
+iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
+iex> params = %{"id" => 1}
 iex> Litmus.validate(params, schema)
-{:ok, %{id: 1}}
+{:ok, %{"id" => 1}}
 
-iex> schema = %{id: %Litmus.Type.Any{required: true}}
+iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
 iex> params = %{}
 iex> Litmus.validate(params, schema)
 {:error, "id is required"}

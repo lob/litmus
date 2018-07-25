@@ -5,8 +5,8 @@ defmodule Litmus.Type.StringTest do
 
   describe "Type.validate/3" do
     test "validates data through Type module" do
-      field = :id
-      data = %{id: "1"}
+      field = "id"
+      data = %{"id" => "1"}
 
       type = %Type.String{
         required: true
@@ -18,8 +18,8 @@ defmodule Litmus.Type.StringTest do
 
   describe "validate_field/3" do
     test "validates property values of data based on their String schema definition in Type.String module" do
-      field = :id
-      data = %{id: "1"}
+      field = "id"
+      data = %{"id" => "1"}
 
       type = %Type.String{
         required: true
@@ -32,8 +32,8 @@ defmodule Litmus.Type.StringTest do
   describe "min_length_validate/3" do
     test "returns :ok when length of field is more than or equal to min_length" do
       min_length = 3
-      field = :id
-      data = %{id: "abc"}
+      field = "id"
+      data = %{"id" => "abc"}
 
       type = %Type.String{
         required: true,
@@ -45,8 +45,8 @@ defmodule Litmus.Type.StringTest do
 
     test "errors when length of field is less than min_length" do
       min_length = 3
-      field = :id
-      data = %{id: "ab"}
+      field = "id"
+      data = %{"id" => "ab"}
 
       type = %Type.String{
         required: true,
@@ -62,8 +62,8 @@ defmodule Litmus.Type.StringTest do
   describe "max_length_validate/3" do
     test "returns :ok when length of field is less than or equal to max_length" do
       max_length = 3
-      field = :id
-      data = %{id: "ab"}
+      field = "id"
+      data = %{"id" => "ab"}
 
       type = %Type.String{
         required: true,
@@ -75,8 +75,8 @@ defmodule Litmus.Type.StringTest do
 
     test "errors when length of field is more than max_length" do
       max_length = 3
-      field = :id
-      data = %{id: "abcd"}
+      field = "id"
+      data = %{"id" => "abcd"}
 
       type = %Type.String{
         required: true,
@@ -92,8 +92,8 @@ defmodule Litmus.Type.StringTest do
   describe "length_validate/3" do
     test "returns :ok when length of field is equal to length" do
       length = 3
-      field = :id
-      data = %{id: "abc"}
+      field = "id"
+      data = %{"id" => "abc"}
 
       type = %Type.String{
         required: true,
@@ -105,8 +105,8 @@ defmodule Litmus.Type.StringTest do
 
     test "errors when length of field is not equal to length" do
       length = 3
-      field = :id
-      data = %{id: "abcd"}
+      field = "id"
+      data = %{"id" => "abcd"}
 
       type = %Type.String{
         required: true,

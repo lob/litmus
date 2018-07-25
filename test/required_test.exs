@@ -6,17 +6,17 @@ defmodule Litmus.RequiredTest do
 
   describe "validate/3" do
     test "returns ok when field is required and is present in params" do
-      params = %{id: "1"}
+      params = %{"id" => "1"}
 
       type = %Type.Any{
         required: true
       }
 
-      assert Required.validate(type, :id, params) == {:ok, params}
+      assert Required.validate(type, "id", params) == {:ok, params}
     end
 
     test "returns error when field is required and not present in params" do
-      field = :id
+      field = "id"
       params = %{}
 
       type = %Type.Any{
@@ -27,7 +27,7 @@ defmodule Litmus.RequiredTest do
     end
 
     test "returns ok when field is not required and is not present in params" do
-      field = :id
+      field = "id"
       params = %{}
 
       type = %Type.Any{
