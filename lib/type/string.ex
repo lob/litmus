@@ -35,7 +35,7 @@ defmodule Litmus.Type.String do
 
   @spec min_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
   def min_length_validate(%Litmus.Type.String{min_length: min_length}, field, params)
-      when min_length != nil do
+      when min_length != nil and is_integer(min_length) and min_length >= 0 do
     if Map.has_key?(params, field) do
       if String.length(params[field]) >= min_length do
         {:ok, params}
@@ -52,7 +52,7 @@ defmodule Litmus.Type.String do
 
   @spec max_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
   def max_length_validate(%Litmus.Type.String{max_length: max_length}, field, params)
-      when max_length != nil do
+      when max_length != nil and is_integer(max_length) and max_length >= 0 do
     if Map.has_key?(params, field) do
       if String.length(params[field]) <= max_length do
         {:ok, params}
@@ -69,7 +69,7 @@ defmodule Litmus.Type.String do
 
   @spec length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
   def length_validate(%Litmus.Type.String{length: length}, field, params)
-      when length != nil do
+      when length != nil and is_integer(length) and length >= 0 do
     if Map.has_key?(params, field) do
       if String.length(params[field]) == length do
         {:ok, params}
