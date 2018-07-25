@@ -3,31 +3,29 @@ defmodule Litmus.Type.AnyTest do
 
   alias Litmus.Type
 
-  test "validates data through Type module" do
-    type = %Type.Any{
-      required: true
-    }
+  describe "Type.validate/3" do
+    test "validates data through Type module" do
+      field = :id
+      data = %{id: "1"}
 
-    field = :id
+      type = %Type.Any{
+        required: true
+      }
 
-    data = %{
-      id: "1"
-    }
-
-    assert Type.validate(type, field, data) == {:ok, data}
+      assert Type.validate(type, field, data) == {:ok, data}
+    end
   end
 
-  test "validates properties of Any schema in Type.Any module" do
-    type = %Type.Any{
-      required: true
-    }
+  describe "validate_field/3" do
+    test "validates property values of data based on their Any schema definition in Type.Any module" do
+      field = :id
+      data = %{id: "1"}
 
-    field = :id
+      type = %Type.Any{
+        required: true
+      }
 
-    data = %{
-      id: "1"
-    }
-
-    assert Type.Any.validate_field(type, field, data) == {:ok, data}
+      assert Type.Any.validate_field(type, field, data) == {:ok, data}
+    end
   end
 end

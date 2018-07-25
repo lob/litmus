@@ -3,89 +3,118 @@ defmodule Litmus.Type.StringTest do
 
   alias Litmus.Type
 
-  test "tests protocol implementation for String data type" do
-    type = %Type.String{
-      required: true
-    }
+  describe "Type.validate/3" do
+    test "validates data through Type module" do
+      field = :id
+      data = %{id: "1"}
 
-    field = :id
+      type = %Type.String{
+        required: true
+      }
 
-    data = %{id: "1"}
-
-    assert Type.validate(type, field, data) == {:ok, data}
+      assert Type.validate(type, field, data) == {:ok, data}
+    end
   end
 
-  test "tests validate_keys function for String data type" do
-    type = %Type.String{
-      required: true
-    }
+  describe "validate_field/3" do
+    test "validates property values of data based on their String schema definition in Type.String module" do
+      field = :id
+      data = %{id: "1"}
 
-    field = :id
+      type = %Type.String{
+        required: true
+      }
 
-    data = %{id: "1"}
-
-    assert Type.String.validate_field(type, field, data) == {:ok, data}
+      assert Type.String.validate_field(type, field, data) == {:ok, data}
+    end
   end
 
-  test "tests min_length_validate function for String data type" do
-    min_length = 3
+  describe "min_length_validate/3" do
+    test "returns :ok when length of field is more than or equal to min_length" do
+      min_length = 3
+      field = :id
+      data = %{id: "abc"}
 
-    type = %Type.String{
-      required: true,
-      min_length: min_length
-    }
+      type = %Type.String{
+        required: true,
+        min_length: min_length
+      }
 
-    field = :id
+      assert Type.String.min_length_validate(type, field, data) == {:ok, data}
+    end
 
-    data = %{id: "abc"}
+    test "errors when length of field is less than min_length" do
+      min_length = 3
+      field = :id
+      data = %{id: "ab"}
 
-    assert Type.String.min_length_validate(type, field, data) == {:ok, data}
+      type = %Type.String{
+        required: true,
+        min_length: min_length
+      }
 
-    data = %{id: "ab"}
-
-    assert Type.String.min_length_validate(type, field, data) ==
-             {:error,
-              "#{field} length must be more than or equal to #{min_length} characters long"}
+      assert Type.String.min_length_validate(type, field, data) ==
+               {:error,
+                "#{field} length must be more than or equal to #{min_length} characters long"}
+    end
   end
 
-  test "tests max_length_validate function for String data type" do
-    max_length = 3
+  describe "max_length_validate/3" do
+    test "returns :ok when length of field is less than or equal to max_length" do
+      max_length = 3
+      field = :id
+      data = %{id: "ab"}
 
-    type = %Type.String{
-      required: true,
-      max_length: max_length
-    }
+      type = %Type.String{
+        required: true,
+        max_length: max_length
+      }
 
-    field = :id
+      assert Type.String.max_length_validate(type, field, data) == {:ok, data}
+    end
 
-    data = %{id: "ab"}
+    test "errors when length of field is more than max_length" do
+      max_length = 3
+      field = :id
+      data = %{id: "abcd"}
 
-    assert Type.String.max_length_validate(type, field, data) == {:ok, data}
+      type = %Type.String{
+        required: true,
+        max_length: max_length
+      }
 
-    data = %{id: "abcd"}
-
-    assert Type.String.max_length_validate(type, field, data) ==
-             {:error,
-              "#{field} length must be less than or equal to #{max_length} characters long"}
+      assert Type.String.max_length_validate(type, field, data) ==
+               {:error,
+                "#{field} length must be less than or equal to #{max_length} characters long"}
+    end
   end
 
-  test "tests length_validate function for String data type" do
-    length = 3
+  describe "length_validate/3" do
+    test "returns :ok when length of field is equal to length" do
+      length = 3
+      field = :id
+      data = %{id: "abc"}
 
-    type = %Type.String{
-      required: true,
-      length: length
-    }
+      type = %Type.String{
+        required: true,
+        length: length
+      }
 
-    field = :id
+      assert Type.String.length_validate(type, field, data) == {:ok, data}
+    end
 
-    data = %{id: "abc"}
+    test "errors when length of field is not equal to length" do
+      length = 3
+      field = :id
+      data = %{id: "abcd"}
 
-    assert Type.String.length_validate(type, field, data) == {:ok, data}
+      type = %Type.String{
+        required: true,
+        length: length
+      }
 
-    data = %{id: "abcd"}
-
-    assert Type.String.length_validate(type, field, data) ==
-             {:error, "#{field} length must be #{length} characters long"}
+      assert Type.String.length_validate(type, field, data) ==
+               {:error, "#{field} length must be #{length} characters long"}
+    end
   end
 end
