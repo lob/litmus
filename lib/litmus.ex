@@ -26,7 +26,7 @@ defmodule Litmus do
 
   @spec validate_schema(map, map) :: {:ok, map} | {:error, binary}
   defp validate_schema(data, schema) do
-    Enum.reduce_while(schema, data, fn {field, type}, modified_data ->
+    Enum.reduce_while(schema, {:ok, data}, fn {field, type}, {:ok, modified_data} ->
       case Type.validate(type, field, modified_data) do
         {:error, msg} ->
           {:halt, {:error, msg}}

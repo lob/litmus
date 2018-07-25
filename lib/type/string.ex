@@ -1,7 +1,7 @@
 defmodule Litmus.Type.String do
-  @moduledoc """
-  Schema and validation for String data type.
-  """
+  @moduledoc false
+
+  alias Litmus.Required
 
   defstruct [
     :min_length,
@@ -20,4 +20,74 @@ defmodule Litmus.Type.String do
           trim: boolean,
           required: boolean
         }
+
+  @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
+  def validate_field(type, field, data) do
+    with {:ok, data} <- Required.validate(type, field, data),
+         {:ok, data} <- min_length_validate(type, field, data),
+         {:ok, data} <- max_length_validate(type, field, data),
+         {:ok, data} <- length_validate(type, field, data) do
+      {:ok, data}
+    else
+      {:error, msg} -> {:error, msg}
+    end
+  end
+
+  @spec min_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  def min_length_validate(%Litmus.Type.String{min_length: min_length}, field, params)
+      when min_length != nil do
+    if Map.has_key?(params, field) do
+      if String.length(params[field]) >= min_length do
+        {:ok, params}
+      else
+        {:error, "#{field} length must be more than or equal to #{min_length} characters long"}
+      end
+    else
+      {:ok, params}
+    end
+  end
+
+  def min_length_validate(%Litmus.Type.String{min_length: nil}, _field, params),
+    do: {:ok, params}
+
+  @spec max_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  def max_length_validate(%Litmus.Type.String{max_length: max_length}, field, params)
+      when max_length != nil do
+    if Map.has_key?(params, field) do
+      if String.length(params[field]) <= max_length do
+        {:ok, params}
+      else
+        {:error, "#{field} length must be less than or equal to #{max_length} characters long"}
+      end
+    else
+      {:ok, params}
+    end
+  end
+
+  def max_length_validate(%Litmus.Type.String{max_length: nil}, _field, params),
+    do: {:ok, params}
+
+  @spec length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  def length_validate(%Litmus.Type.String{length: length}, field, params)
+      when length != nil do
+    if Map.has_key?(params, field) do
+      if String.length(params[field]) == length do
+        {:ok, params}
+      else
+        {:error, "#{field} length must be equal to #{length} characters long"}
+      end
+    else
+      {:ok, params}
+    end
+  end
+
+  def length_validate(%Litmus.Type.String{length: nil}, _field, params),
+    do: {:ok, params}
+
+  defimpl Litmus.Type do
+    alias Litmus.Type
+
+    @spec validate(Type.t(), binary, map) :: {:ok, map} | {:error, binary}
+    def validate(type, field, data), do: Type.String.validate_field(type, field, data)
+  end
 end
