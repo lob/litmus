@@ -36,12 +36,8 @@ defmodule Litmus.Type.String do
   @spec min_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
   def min_length_validate(%Litmus.Type.String{min_length: min_length}, field, params)
       when min_length != nil and is_integer(min_length) and min_length >= 0 do
-    if Map.has_key?(params, field) do
-      if String.length(params[field]) >= min_length do
-        {:ok, params}
-      else
-        {:error, "#{field} length must be more than or equal to #{min_length} characters long"}
-      end
+    if Map.has_key?(params, field) && String.length(params[field]) < min_length do
+      {:error, "#{field} length must be more than or equal to #{min_length} characters long"}
     else
       {:ok, params}
     end
@@ -53,12 +49,8 @@ defmodule Litmus.Type.String do
   @spec max_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
   def max_length_validate(%Litmus.Type.String{max_length: max_length}, field, params)
       when max_length != nil and is_integer(max_length) and max_length >= 0 do
-    if Map.has_key?(params, field) do
-      if String.length(params[field]) <= max_length do
-        {:ok, params}
-      else
-        {:error, "#{field} length must be less than or equal to #{max_length} characters long"}
-      end
+    if Map.has_key?(params, field) && String.length(params[field]) > max_length do
+      {:error, "#{field} length must be less than or equal to #{max_length} characters long"}
     else
       {:ok, params}
     end
@@ -70,12 +62,8 @@ defmodule Litmus.Type.String do
   @spec length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
   def length_validate(%Litmus.Type.String{length: length}, field, params)
       when length != nil and is_integer(length) and length >= 0 do
-    if Map.has_key?(params, field) do
-      if String.length(params[field]) == length do
-        {:ok, params}
-      else
-        {:error, "#{field} length must be #{length} characters long"}
-      end
+    if Map.has_key?(params, field) && String.length(params[field]) != length do
+      {:error, "#{field} length must be #{length} characters long"}
     else
       {:ok, params}
     end

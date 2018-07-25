@@ -10,9 +10,7 @@ defmodule Litmus.Type.StringTest do
 
     field = :id
 
-    data = %{
-      id: "1"
-    }
+    data = %{id: "1"}
 
     assert Type.validate(type, field, data) == {:ok, data}
   end
@@ -24,9 +22,7 @@ defmodule Litmus.Type.StringTest do
 
     field = :id
 
-    data = %{
-      id: "1"
-    }
+    data = %{id: "1"}
 
     assert Type.String.validate_field(type, field, data) == {:ok, data}
   end
@@ -41,15 +37,11 @@ defmodule Litmus.Type.StringTest do
 
     field = :id
 
-    data = %{
-      id: "abc"
-    }
+    data = %{id: "abc"}
 
     assert Type.String.min_length_validate(type, field, data) == {:ok, data}
 
-    data = %{
-      id: "ab"
-    }
+    data = %{id: "ab"}
 
     assert Type.String.min_length_validate(type, field, data) ==
              {:error,
@@ -66,15 +58,11 @@ defmodule Litmus.Type.StringTest do
 
     field = :id
 
-    data = %{
-      id: "ab"
-    }
+    data = %{id: "ab"}
 
     assert Type.String.max_length_validate(type, field, data) == {:ok, data}
 
-    data = %{
-      id: "abcd"
-    }
+    data = %{id: "abcd"}
 
     assert Type.String.max_length_validate(type, field, data) ==
              {:error,
@@ -91,15 +79,11 @@ defmodule Litmus.Type.StringTest do
 
     field = :id
 
-    data = %{
-      id: "abc"
-    }
+    data = %{id: "abc"}
 
     assert Type.String.length_validate(type, field, data) == {:ok, data}
 
-    data = %{
-      id: "abcd"
-    }
+    data = %{id: "abcd"}
 
     assert Type.String.length_validate(type, field, data) ==
              {:error, "#{field} length must be #{length} characters long"}
