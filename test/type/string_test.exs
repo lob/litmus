@@ -51,7 +51,9 @@ defmodule Litmus.Type.StringTest do
       id: "ab"
     }
 
-    assert Type.String.min_length_validate(type, field, data) == {:error, "#{field} length must be more than or equal to #{min_length} characters long"}
+    assert Type.String.min_length_validate(type, field, data) ==
+             {:error,
+              "#{field} length must be more than or equal to #{min_length} characters long"}
   end
 
   test "tests max_length_validate function for String data type" do
@@ -74,7 +76,9 @@ defmodule Litmus.Type.StringTest do
       id: "abcd"
     }
 
-    assert Type.String.max_length_validate(type, field, data) == {:error, "#{field} length must be less than or equal to #{max_length} characters long"}
+    assert Type.String.max_length_validate(type, field, data) ==
+             {:error,
+              "#{field} length must be less than or equal to #{max_length} characters long"}
   end
 
   test "tests length_validate function for String data type" do
@@ -97,6 +101,7 @@ defmodule Litmus.Type.StringTest do
       id: "abcd"
     }
 
-    assert Type.String.length_validate(type, field, data) == {:error, "#{field} length must be equal to #{length} characters long"}
+    assert Type.String.length_validate(type, field, data) ==
+             {:error, "#{field} length must be equal to #{length} characters long"}
   end
 end

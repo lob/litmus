@@ -5,7 +5,7 @@ defmodule LitmusTest do
   alias Litmus.Type
 
   test "validates data according to a schema" do
-   login_schema = %{
+    login_schema = %{
       id: %Litmus.Type.Any{
         required: true
       },
