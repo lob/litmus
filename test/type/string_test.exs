@@ -16,18 +16,19 @@ defmodule Litmus.Type.StringTest do
     end
   end
 
-  describe "min_length_validate/3" do
+  describe "minimum length validation" do
     test "returns :ok when length of field is more than or equal to min_length" do
       min_length = 3
-      field = "id"
       data = %{"id" => "abc"}
 
-      type = %Type.String{
-        required: true,
-        min_length: min_length
+      schema = %{
+        "id" => %Litmus.Type.String{
+          required: true,
+          min_length: min_length
+        }
       }
 
-      assert Type.String.min_length_validate(type, field, data) == {:ok, data}
+      assert Litmus.validate(data, schema) == {:ok, data}
     end
 
     test "errors when length of field is less than min_length" do
@@ -35,29 +36,32 @@ defmodule Litmus.Type.StringTest do
       field = "id"
       data = %{"id" => "ab"}
 
-      type = %Type.String{
-        required: true,
-        min_length: min_length
+      schema = %{
+        "id" => %Litmus.Type.String{
+          required: true,
+          min_length: min_length
+        }
       }
 
-      assert Type.String.min_length_validate(type, field, data) ==
+      assert Litmus.validate(data, schema) ==
                {:error,
-                "#{field} length must be more than or equal to #{min_length} characters long"}
+                "#{field} length must be greater than or equal to #{min_length} characters"}
     end
   end
 
-  describe "max_length_validate/3" do
+  describe "maximum length validation" do
     test "returns :ok when length of field is less than or equal to max_length" do
       max_length = 3
-      field = "id"
       data = %{"id" => "ab"}
 
-      type = %Type.String{
-        required: true,
-        max_length: max_length
+      schema = %{
+        "id" => %Litmus.Type.String{
+          required: true,
+          max_length: max_length
+        }
       }
 
-      assert Type.String.max_length_validate(type, field, data) == {:ok, data}
+      assert Litmus.validate(data, schema) == {:ok, data}
     end
 
     test "errors when length of field is more than max_length" do
@@ -65,29 +69,31 @@ defmodule Litmus.Type.StringTest do
       field = "id"
       data = %{"id" => "abcd"}
 
-      type = %Type.String{
-        required: true,
-        max_length: max_length
+      schema = %{
+        "id" => %Litmus.Type.String{
+          required: true,
+          max_length: max_length
+        }
       }
 
-      assert Type.String.max_length_validate(type, field, data) ==
-               {:error,
-                "#{field} length must be less than or equal to #{max_length} characters long"}
+      assert Litmus.validate(data, schema) ==
+               {:error, "#{field} length must be less than or equal to #{max_length} characters"}
     end
   end
 
-  describe "length_validate/3" do
+  describe "exact length validation" do
     test "returns :ok when length of field is equal to length" do
       length = 3
-      field = "id"
       data = %{"id" => "abc"}
 
-      type = %Type.String{
-        required: true,
-        length: length
+      schema = %{
+        "id" => %Litmus.Type.String{
+          required: true,
+          length: length
+        }
       }
 
-      assert Type.String.length_validate(type, field, data) == {:ok, data}
+      assert Litmus.validate(data, schema) == {:ok, data}
     end
 
     test "errors when length of field is not equal to length" do
@@ -95,13 +101,15 @@ defmodule Litmus.Type.StringTest do
       field = "id"
       data = %{"id" => "abcd"}
 
-      type = %Type.String{
-        required: true,
-        length: length
+      schema = %{
+        "id" => %Litmus.Type.String{
+          required: true,
+          length: length
+        }
       }
 
-      assert Type.String.length_validate(type, field, data) ==
-               {:error, "#{field} length must be #{length} characters long"}
+      assert Litmus.validate(data, schema) ==
+               {:error, "#{field} length must be #{length} characters"}
     end
   end
 end
