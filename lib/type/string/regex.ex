@@ -1,4 +1,6 @@
 defmodule Litmus.Type.String.Regex do
+  @moduledoc false
+
   defstruct [:pattern, :error_message]
 
   @type t :: %__MODULE__{
