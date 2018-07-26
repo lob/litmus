@@ -13,9 +13,9 @@ defmodule Litmus.Type.String do
   ]
 
   @type t :: %__MODULE__{
-          min_length: non_neg_integer,
-          max_length: non_neg_integer,
-          length: non_neg_integer,
+          min_length: non_neg_integer | nil,
+          max_length: non_neg_integer | nil,
+          length: non_neg_integer | nil,
           regex: term,
           trim: boolean,
           required: boolean
