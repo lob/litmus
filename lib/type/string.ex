@@ -34,7 +34,7 @@ defmodule Litmus.Type.String do
   end
 
   @spec min_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
-  defp min_length_validate(%Litmus.Type.String{min_length: min_length}, field, params)
+  defp min_length_validate(%__MODULE__{min_length: min_length}, field, params)
        when min_length != nil and is_integer(min_length) and min_length >= 0 do
     if Map.has_key?(params, field) && String.length(params[field]) < min_length do
       {:error, "#{field} length must be greater than or equal to #{min_length} characters"}
@@ -43,12 +43,12 @@ defmodule Litmus.Type.String do
     end
   end
 
-  defp min_length_validate(%Litmus.Type.String{min_length: nil}, _field, params) do
+  defp min_length_validate(%__MODULE__{min_length: nil}, _field, params) do
     {:ok, params}
   end
 
   @spec max_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
-  defp max_length_validate(%Litmus.Type.String{max_length: max_length}, field, params)
+  defp max_length_validate(%__MODULE__{max_length: max_length}, field, params)
        when max_length != nil and is_integer(max_length) and max_length >= 0 do
     if Map.has_key?(params, field) && String.length(params[field]) > max_length do
       {:error, "#{field} length must be less than or equal to #{max_length} characters"}
@@ -57,12 +57,12 @@ defmodule Litmus.Type.String do
     end
   end
 
-  defp max_length_validate(%Litmus.Type.String{max_length: nil}, _field, params) do
+  defp max_length_validate(%__MODULE__{max_length: nil}, _field, params) do
     {:ok, params}
   end
 
   @spec length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
-  defp length_validate(%Litmus.Type.String{length: length}, field, params)
+  defp length_validate(%__MODULE__{length: length}, field, params)
        when length != nil and is_integer(length) and length >= 0 do
     if Map.has_key?(params, field) && String.length(params[field]) != length do
       {:error, "#{field} length must be #{length} characters"}
@@ -71,7 +71,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  defp length_validate(%Litmus.Type.String{length: nil}, _field, params) do
+  defp length_validate(%__MODULE__{length: nil}, _field, params) do
     {:ok, params}
   end
 
