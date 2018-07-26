@@ -112,4 +112,88 @@ defmodule Litmus.Type.StringTest do
                {:error, "#{field} length must be #{length} characters"}
     end
   end
+
+  describe "regex validation" do
+    test "returns :ok when value matches the regex pattern" do
+      data = %{"zip_code" => "94107-1741"}
+
+      schema = %{
+        "zip_code" => %Litmus.Type.String{
+          min_length: 5,
+          regex: %Litmus.Type.String.Regex{
+            pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/,
+            error_message: "zip_code must be in a valid zip or zip+4 format"
+          },
+          trim: true
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "errors with custom error message when value does not match regex pattern" do
+      data = %{"zip_code" => "94107-xxxx"}
+
+      schema = %{
+        "zip_code" => %Litmus.Type.String{
+          min_length: 5,
+          regex: %Litmus.Type.String.Regex{
+            pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/,
+            error_message: "zip_code must be in a valid zip or zip+4 format"
+          },
+          trim: true
+        }
+      }
+
+      assert Litmus.validate(data, schema) ==
+               {:error, "zip_code must be in a valid zip or zip+4 format"}
+    end
+
+    test "errors with default error message when value does not match regex pattern" do
+      data = %{"zip_code" => "94107-xxxx"}
+      field = "zip_code"
+
+      schema = %{
+        "zip_code" => %Litmus.Type.String{
+          min_length: 5,
+          regex: %Litmus.Type.String.Regex{
+            pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/
+          },
+          trim: true
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:error, "#{field} must be in a valid format"}
+    end
+  end
+
+  describe "trim extra whitespaces" do
+    test "returns :ok with new parameters having trimmed values when trim is set to true" do
+      data = %{"id" => "abc "}
+      trimmed_data = %{"id" => "abc"}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          max_length: 3,
+          required: true,
+          trim: true
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, trimmed_data}
+    end
+
+    test "returns :ok with same parameters when trim is set to false" do
+      data = %{"id" => "abc"}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          required: true,
+          trim: false
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+  end
 end
