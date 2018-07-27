@@ -52,7 +52,6 @@ iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
 iex> params = %{"id" => 1}
 iex> Litmus.validate(params, schema)
 {:ok, %{"id" => 1}}
-
 iex> params = %{}
 iex> Litmus.validate(params, schema)
 {:error, "id is required"}
@@ -72,7 +71,6 @@ iex> schema = %{"username" => %Litmus.Type.String{min_length: 3, max_length: 10,
 iex> params = %{"username" => " user123 ", "password" => "root01"}
 iex> Litmus.validate(params, schema)
 {:ok, %{"username" => "user123", "password" => "root01"}}
-
 iex> params = %{"username" => " user123 ", "password" => "ro!_@1"}
 iex> Litmus.validate(params, schema)
 {:error, "password must be alphanumeric"}
