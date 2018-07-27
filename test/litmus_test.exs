@@ -12,21 +12,29 @@ defmodule LitmusTest do
         },
         "user" => %Litmus.Type.String{
           max_length: 6,
-          min_length: 3
+          min_length: 3,
+          regex: %Litmus.Type.String.Regex{
+            pattern: ~r/^[a-zA-Z0-9_]*$/,
+            error_message: "username must be alphanumeric"
+          },
+          trim: true
         },
         "password" => %Litmus.Type.String{
           length: 4,
-          required: true
+          required: true,
+          trim: true
         }
       }
 
       req_params = %{
         "id" => "abc",
-        "password" => "1234",
+        "password" => " 1234 ",
         "user" => "qwerty"
       }
 
-      assert Litmus.validate(req_params, login_schema) == {:ok, req_params}
+      modified_params = Map.replace!(req_params, "password", String.trim(req_params["password"]))
+
+      assert Litmus.validate(req_params, login_schema) == {:ok, modified_params}
     end
 
     test "errors when a disallowed parameter is passed" do
