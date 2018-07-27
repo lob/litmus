@@ -45,7 +45,7 @@ Currently, we support the following data types:
 ### Litmus.Type.Any
 
 The `Any` module contains options that will be common to all data types. It supports the following options:
-  * *Required* - Setting `required` to `true` will cause a validation error when a field is not present or the value is `nil`. Allowed values for required are `true` and `false`. The default is `false`.
+  * `:required` - Setting `required` to `true` will cause a validation error when a field is not present or the value is `nil`. Allowed values for required are `true` and `false`. The default is `false`.
 
 ```
 iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
