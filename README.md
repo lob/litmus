@@ -67,7 +67,20 @@ The `String` module contains options that will validate String data types. It su
   * `:trim` - Removes additional whitespaces in a string and returns the new value. Allowed values are `true` and `false`. The default is `false`.
 
 ```
-iex> schema = %{"username" => %Litmus.Type.String{min_length: 3, max_length: 10, trim: true}, "password" => %Litmus.Type.String{length: 6, regex: %Litmus.Type.String.Regex{pattern: ~r/^[a-zA-Z0-9_]*$/, error_message: "password must be alphanumeric"}}}
+iex> schema = %{
+...> "username" => %Litmus.Type.String{
+...>   min_length: 3,
+...>   max_length: 10,
+...>   trim: true
+...> },
+...> "password" => %Litmus.Type.String{
+...>   length: 6,
+...>   regex: %Litmus.Type.String.Regex{
+...>     pattern: ~r/^[a-zA-Z0-9_]*$/,
+...>     error_message: "password must be alphanumeric"
+...>   }
+...>  }
+...> }
 iex> params = %{"username" => " user123 ", "password" => "root01"}
 iex> Litmus.validate(params, schema)
 {:ok, %{"username" => "user123", "password" => "root01"}}
