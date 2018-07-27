@@ -45,9 +45,7 @@ Currently, we support the following data types:
 ### Litmus.Type.Any
 
 The `Any` module contains options that will be common to all data types. It supports the following options:
-  * *Required*
-
-  Marks a parameter as required which will not allow `nil` as value. Allowed values are boolean `true` and `false`. The default value of `required` is set to `false`.
+  * *Required* - Setting `required` to `true` will cause a validation error when a field is not present or the value is `nil`. Allowed values for required are `true` and `false`. The default is `false`.
 
 ```
 iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
@@ -63,85 +61,23 @@ iex> Litmus.validate(params, schema)
 
 ### Litmus.Type.String
 
-The `String` module contains options that will be common to all data types. It supports the following options:
-  * *min_length*
-
-  Specifies the minimum number of characters needed in the string. Allowed values are non-negative integers.
-
-```
-iex> schema = %{"username" => %Litmus.Type.String{min_length: 3}}
-iex> params = %{"username" => "user123"}
-iex> Litmus.validate(params, schema)
-{:ok, %{"username" => "user123"}}
-
-iex> schema = %{"username" => %Litmus.Type.String{min_length: 3}}
-iex> params = %{"username" => "ab"}
-iex> Litmus.validate(params, schema)
-{:error, "username length must be greater than or equal to 3 characters"}
-```
-
-  * *max_length*
-
-  Specifies the maximum number of characters needed in the string. Allowed values are non-negative integers.
+The `String` module contains options that will validate String data types. It supports the following options:
+  * `:min_length` - Specifies the minimum number of characters needed in the string. Allowed values are non-negative integers.
+  * `:max_length` - Specifies the maximum number of characters needed in the string. Allowed values are non-negative integers.
+  * `:length` - Specifies the exact number of characters needed in the string. Allowed values are non-negative integers.
+  * `:regex` - Specifies a Regular expression that a string must match. Allowed value is a struct consisting of pattern and error_message. `pattern` is a `Regex` and `error_message` is a `binary` value. Default value for pattern is `nil`. If no error_message is given, the default message returned on error is `"#{field} must be in a valid format"`.
+  * `:trim` - Removes additional whitespaces in a string and returns the new value. Allowed values are `true` and `false`. The default is `false`.
 
 ```
-iex> schema = %{"username" => %Litmus.Type.String{max_length: 6}}
-iex> params = %{"username" => "user11"}
+iex> schema = %{"username" => %Litmus.Type.String{min_length: 3, max_length: 10, trim: true}, "password" => %Litmus.Type.String{length: 6, regex: %Litmus.Type.String.Regex{pattern: ~r/^[a-zA-Z0-9_]*$/, error_message: "password must be alphanumeric"}}}
+iex> params = %{"username" => " user123 ", "password" => "root01"}
 iex> Litmus.validate(params, schema)
-{:ok, %{"username" => "user11"}}
+{:ok, %{"username" => "user123", "password" => "root01"}}
 
-iex> schema = %{"username" => %Litmus.Type.String{max_length: 6}}
-iex> params = %{"username" => "user12345"}
+iex> schema = %{"username" => %Litmus.Type.String{min_length: 3, max_length: 10, trim: true}, "password" => %Litmus.Type.String{length: 6, regex: %Litmus.Type.String.Regex{pattern: ~r/^[a-zA-Z0-9_]*$/, error_message: "password must be alphanumeric"}}}
+iex> params = %{"username" => " user123 ", "password" => "root@1"}
 iex> Litmus.validate(params, schema)
-{:error, "username length must be less than or equal to 6 characters"}
-```
-
-  * *length*
-
-  Specifies the exact number of characters needed in the string. Allowed values are non-negative integers.
-
-```
-iex> schema = %{"username" => %Litmus.Type.String{length: 6}}
-iex> params = %{"username" => "user11"}
-iex> Litmus.validate(params, schema)
-{:ok, %{"username" => "user11"}}
-
-iex> schema = %{"username" => %Litmus.Type.String{length: 6}}
-iex> params = %{"username" => "user12345"}
-iex> Litmus.validate(params, schema)
-{:error, "username length must be 6 characters"}
-```
-
-  * *regex*
-
-  Specifies a Regular expression that a string must match. Allowed value is a struct consisting of pattern and error_message. `pattern` is a `Regex` and `error_message` is a `binary` value. Default value for pattern is `nil`. If no error_message is given, the default message returned on error is `"#{field} must be in a valid format"`.
-
-```
-iex> schema = %{"username" => %Litmus.Type.String{regex: %Litmus.Type.String.Regex{pattern: ~r/^[a-zA-Z0-9_]*$/, error_message: "username must be in a valid zip or zip+4 format"}}}
-iex> params = %{"username" => "user123"}
-iex> Litmus.validate(params, schema)
-{:ok, %{"username" => "user123"}}
-
-iex> schema = %{"username" => %Litmus.Type.String{regex: %Litmus.Type.String.Regex{pattern: ~r/^[a-zA-Z0-9_]*$/, error_message: "username must be alphanumeric"}}}
-iex> params = %{"username" => "user@123"}
-iex> Litmus.validate(params, schema)
-{:error, "username must be alphanumeric"}
-```
-
-  * *trim*
-
-  Removes additional whitespaces in a string and returns the new value. Allowed values are boolean `true` and `false`. Default value of trim is set to `false`.
-
-```
-iex> schema = %{"username" => %Litmus.Type.String{trim: true}}
-iex> params = %{"username" => " user123 "}
-iex> Litmus.validate(params, schema)
-{:ok, %{"username" => "user123"}}
-
-iex> schema = %{"username" => %Litmus.Type.String{}}
-iex> params = %{"username" => " user123 "}
-iex> Litmus.validate(params, schema)
-{:ok, %{"username" => " user123 "}}
+{:error, "password must be alphanumeric"}
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)

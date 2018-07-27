@@ -119,12 +119,10 @@ defmodule Litmus.Type.StringTest do
 
       schema = %{
         "zip_code" => %Litmus.Type.String{
-          min_length: 5,
           regex: %Litmus.Type.String.Regex{
             pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/,
             error_message: "zip_code must be in a valid zip or zip+4 format"
-          },
-          trim: true
+          }
         }
       }
 
@@ -136,12 +134,10 @@ defmodule Litmus.Type.StringTest do
 
       schema = %{
         "zip_code" => %Litmus.Type.String{
-          min_length: 5,
           regex: %Litmus.Type.String.Regex{
             pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/,
             error_message: "zip_code must be in a valid zip or zip+4 format"
-          },
-          trim: true
+          }
         }
       }
 
@@ -154,12 +150,10 @@ defmodule Litmus.Type.StringTest do
       field = "zip_code"
 
       schema = %{
-        "zip_code" => %Litmus.Type.String{
-          min_length: 5,
+        field => %Litmus.Type.String{
           regex: %Litmus.Type.String.Regex{
             pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/
-          },
-          trim: true
+          }
         }
       }
 
@@ -169,13 +163,11 @@ defmodule Litmus.Type.StringTest do
 
   describe "trim extra whitespaces" do
     test "returns :ok with new parameters having trimmed values when trim is set to true" do
-      data = %{"id" => "abc "}
+      data = %{"id" => " abc "}
       trimmed_data = %{"id" => "abc"}
 
       schema = %{
         "id" => %Litmus.Type.String{
-          max_length: 3,
-          required: true,
           trim: true
         }
       }
@@ -184,11 +176,10 @@ defmodule Litmus.Type.StringTest do
     end
 
     test "returns :ok with same parameters when trim is set to false" do
-      data = %{"id" => "abc"}
+      data = %{"id" => " abc "}
 
       schema = %{
         "id" => %Litmus.Type.String{
-          required: true,
           trim: false
         }
       }
