@@ -115,13 +115,13 @@ defmodule Litmus.Type.StringTest do
 
   describe "regex validation" do
     test "returns :ok when value matches the regex pattern" do
-      data = %{"zip_code" => "94107-1741"}
+      data = %{"username" => "user123"}
 
       schema = %{
-        "zip_code" => %Litmus.Type.String{
+        "username" => %Litmus.Type.String{
           regex: %Litmus.Type.String.Regex{
-            pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/,
-            error_message: "zip_code must be in a valid zip or zip+4 format"
+            pattern: ~r/^[a-zA-Z0-9_]*$/,
+            error_message: "username must be alphanumeric"
           }
         }
       }
@@ -130,24 +130,23 @@ defmodule Litmus.Type.StringTest do
     end
 
     test "errors with custom error message when value does not match regex pattern" do
-      data = %{"zip_code" => "94107-xxxx"}
+      data = %{"username" => "x@##1"}
 
       schema = %{
-        "zip_code" => %Litmus.Type.String{
+        "username" => %Litmus.Type.String{
           regex: %Litmus.Type.String.Regex{
-            pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/,
-            error_message: "zip_code must be in a valid zip or zip+4 format"
+            pattern: ~r/^[a-zA-Z0-9_]*$/,
+            error_message: "username must be alphanumeric"
           }
         }
       }
 
-      assert Litmus.validate(data, schema) ==
-               {:error, "zip_code must be in a valid zip or zip+4 format"}
+      assert Litmus.validate(data, schema) == {:error, "username must be alphanumeric"}
     end
 
     test "errors with default error message when value does not match regex pattern" do
-      data = %{"zip_code" => "94107-xxxx"}
-      field = "zip_code"
+      data = %{"username" => "x@##1"}
+      field = "username"
 
       schema = %{
         field => %Litmus.Type.String{

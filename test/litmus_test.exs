@@ -14,7 +14,8 @@ defmodule LitmusTest do
           max_length: 6,
           min_length: 3,
           regex: %Litmus.Type.String.Regex{
-            pattern: ~r/^[a-zA-Z0-9_]*$/
+            pattern: ~r/^[a-zA-Z0-9_]*$/,
+            error_message: "username must be alphanumeric"
           },
           trim: true
         },
@@ -22,22 +23,13 @@ defmodule LitmusTest do
           length: 4,
           required: true,
           trim: true
-        },
-        "zip_code" => %Litmus.Type.String{
-          min_length: 5,
-          regex: %Litmus.Type.String.Regex{
-            pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/,
-            error_message: "zip_code must be in a valid zip or zip+4 format"
-          },
-          trim: true
         }
       }
 
       req_params = %{
         "id" => "abc",
-        "password" => "1234 ",
-        "user" => "qwerty",
-        "zip_code" => "94107-1741"
+        "password" => " 1234 ",
+        "user" => "qwerty"
       }
 
       modified_params = Map.replace!(req_params, "password", String.trim(req_params["password"]))

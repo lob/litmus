@@ -53,7 +53,6 @@ iex> params = %{"id" => 1}
 iex> Litmus.validate(params, schema)
 {:ok, %{"id" => 1}}
 
-iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
 iex> params = %{}
 iex> Litmus.validate(params, schema)
 {:error, "id is required"}
@@ -65,7 +64,7 @@ The `String` module contains options that will validate String data types. It su
   * `:min_length` - Specifies the minimum number of characters needed in the string. Allowed values are non-negative integers.
   * `:max_length` - Specifies the maximum number of characters needed in the string. Allowed values are non-negative integers.
   * `:length` - Specifies the exact number of characters needed in the string. Allowed values are non-negative integers.
-  * `:regex` - Specifies a Regular expression that a string must match. Allowed value is a struct consisting of pattern and error_message. `pattern` is a `Regex` and `error_message` is a `binary` value. Default value for pattern is `nil`. If no error_message is given, the default message returned on error is `"#{field} must be in a valid format"`.
+  * `:regex` - Specifies a Regular expression that a string must match. Allowed value is a struct consisting of `pattern` and `error_message`, where `pattern` is a `Regex` and `error_message` is a `binary` value. Default value for pattern is `nil`. If no error_message is given, the default message returned on error is `"#{field} must be in a valid format"`.
   * `:trim` - Removes additional whitespaces in a string and returns the new value. Allowed values are `true` and `false`. The default is `false`.
 
 ```
@@ -74,8 +73,7 @@ iex> params = %{"username" => " user123 ", "password" => "root01"}
 iex> Litmus.validate(params, schema)
 {:ok, %{"username" => "user123", "password" => "root01"}}
 
-iex> schema = %{"username" => %Litmus.Type.String{min_length: 3, max_length: 10, trim: true}, "password" => %Litmus.Type.String{length: 6, regex: %Litmus.Type.String.Regex{pattern: ~r/^[a-zA-Z0-9_]*$/, error_message: "password must be alphanumeric"}}}
-iex> params = %{"username" => " user123 ", "password" => "root@1"}
+iex> params = %{"username" => " user123 ", "password" => "ro!_@1"}
 iex> Litmus.validate(params, schema)
 {:error, "password must be alphanumeric"}
 ```
