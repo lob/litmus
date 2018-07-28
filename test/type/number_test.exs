@@ -19,24 +19,27 @@ defmodule Litmus.Type.NumberTest do
   describe "convert string to number" do
     test "returns :ok with modified value when convert is true" do
       data = %{"id" => ".6"}
-
+      data_1 = %{"id" => "6"}
+      modified_data = %{"id" => 0.6}
+      modified_data_1 = %{"id" => 6}
       schema = %{
         "id" => %Litmus.Type.Number{}
       }
 
-      modified_data = %{"id" => 0.6}
       assert Litmus.validate(data, schema) == {:ok, modified_data}
+      assert Litmus.validate(data_1, schema) == {:ok, modified_data_1}
     end
 
-    test "errors when convert is true and field type is neither number or string" do
+    test "errors when convert is true and field type is neither number or stringified number" do
       field = "id"
       data = %{"id" => "1.a"}
-
+      data_1 = %{"id" => true}
       schema = %{
         "id" => %Litmus.Type.Number{}
       }
 
       assert Litmus.validate(data, schema) == {:error, "#{field} must be a number"}
+      assert Litmus.validate(data_1, schema) == {:error, "#{field} must be a number"}
     end
   end
 
