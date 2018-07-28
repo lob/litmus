@@ -124,8 +124,6 @@ defmodule Litmus.Type.String do
     end
   end
 
-
-
   defimpl Litmus.Type do
     alias Litmus.Type
 
