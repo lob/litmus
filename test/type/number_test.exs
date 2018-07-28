@@ -21,9 +21,7 @@ defmodule Litmus.Type.NumberTest do
       data = %{"id" => ".6"}
 
       schema = %{
-        "id" => %Litmus.Type.Number{
-          convert: true
-        }
+        "id" => %Litmus.Type.Number{}
       }
 
       modified_data = %{"id" => 0.6}
@@ -35,12 +33,10 @@ defmodule Litmus.Type.NumberTest do
       data = %{"id" => "1.a"}
 
       schema = %{
-        "id" => %Litmus.Type.Number{
-          convert: true
-        }
+        "id" => %Litmus.Type.Number{}
       }
 
-      assert Litmus.validate(data, schema) == {:error, "#{field} must be a valid number"}
+      assert Litmus.validate(data, schema) == {:error, "#{field} must be a number"}
     end
   end
 

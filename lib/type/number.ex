@@ -7,16 +7,14 @@ defmodule Litmus.Type.Number do
     :min,
     :max,
     integer: false,
-    required: false,
-    convert: true
+    required: false
   ]
 
   @type t :: %__MODULE__{
           min: non_neg_integer | nil,
           max: non_neg_integer | nil,
           integer: boolean,
-          required: boolean,
-          convert: boolean
+          required: boolean
         }
 
   alias Litmus.Required
@@ -53,27 +51,23 @@ defmodule Litmus.Type.Number do
   end
 
   @spec convert(t, binary, map) :: {:ok, map} | {:error, binary}
-  defp convert(%__MODULE__{convert: false}, _field, params) do
-    {:ok, params}
-  end
-
-  defp convert(%__MODULE__{convert: true}, field, params) do
-    if Map.has_key?(params, field) && !(is_binary(params[field]) || is_number(params[field])) do
-      {:error, "#{field} must be a valid number"}
+  defp convert(%__MODULE__{}, field, params) do
+    if Map.has_key?(params, field) and !(is_binary(params[field]) or is_number(params[field])) do
+      {:error, "#{field} must be a number"}
     else
-      if is_binary(params[field]) do
+      if is_number(params[field]) do
+        {:ok, params}
+      else
         modified_value = string_to_number(params[field])
 
         case modified_value do
           :error ->
-            {:error, "#{field} must be a valid number"}
+            {:error, "#{field} must be a number"}
 
           _ ->
             modified_params = Map.put(params, field, modified_value)
             {:ok, modified_params}
         end
-      else
-        {:ok, params}
       end
     end
   end

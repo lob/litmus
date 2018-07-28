@@ -38,8 +38,9 @@ iex> Litmus.validate(params, schema)
 Currently, we support the following data types:
 
 * [**Any**](#module-litmus-type-any)
-* [**String**](#module-litmus-type-string)
 * [**Boolean**](#module-litmus-type-boolean)
+* [**Number**](#module-litmus-type-number)
+* [**String**](#module-litmus-type-string)
 
 ## Data Types Supported
 
@@ -56,6 +57,52 @@ iex> Litmus.validate(params, schema)
 iex> params = %{}
 iex> Litmus.validate(params, schema)
 {:error, "id is required"}
+```
+
+### Litmus.Type.Boolean
+
+The `Boolean` module contains options that will validate Boolean data types. It converts truthy and falsy values to `true` or `false`. It supports the following options:
+  * `:truthy` - Allows additional values, i.e. truthy values to be considered valid booleans by converting them to `true` during validation. Allowed value is an array of binary, number or boolean values. The default is `[true, "true"]`
+  * `:falsy` - Allows additional values, i.e. falsy values to be considered valid booleans by converting them to `false` during validation. Allowed value is an array of binary, number or boolean values. The default is `[false, "false"]`
+
+```
+iex> schema = %{
+...> "new_user" => %Litmus.Type.Boolean{
+...>   truthy: ["1"],
+...>   falsy: ["0"]
+...>  }
+...> }
+iex> params = %{"new_user" => "1"}
+iex> Litmus.validate(params, schema)
+{:ok, %{"new_user" => true}}
+iex> params = %{"new_user" => 0}
+iex> Litmus.validate(params, schema)
+{:error, "new_user must be a boolean"}
+```
+
+### Litmus.Type.Number
+
+The `Number` module contains options that will validate Number data types. It supports the following options:
+  * `:min` - Specifies the minimum value of the field. Allowed values are non-negative integers.
+  * `:max` - Specifies the maximum value of the field. Allowed values are non-negative integers.
+  * `:integer` - Specifies that the number must be an integer (no floating point). Allowed values are `true` and `false`. The default is `false`.
+
+```
+iex> schema = %{
+...> "id" => %Litmus.Type.Number{
+...>   integer: true
+...> },
+...> "gpa" => %Litmus.Type.Number{
+...>   min: 0,
+...>   max: 4
+...>  }
+...> }
+iex> params = %{"id" => "123", "gpa" => 3.8}
+iex> Litmus.validate(params, schema)
+{:ok, %{"id" => 123, "gpa" => 3.8}}
+iex> params = %{"id" => "123.456", "gpa" => 3.8}
+iex> Litmus.validate(params, schema)
+{:error, "id must be an integer"}
 ```
 
 ### Litmus.Type.String
@@ -88,27 +135,6 @@ iex> Litmus.validate(params, schema)
 iex> params = %{"username" => " user123 ", "password" => "ro!_@1"}
 iex> Litmus.validate(params, schema)
 {:error, "password must be alphanumeric"}
-```
-
-### Litmus.Type.Boolean
-
-The `Boolean` module contains options that will validate Boolean data types. It converts truthy and falsy values to `true` or `false`. It supports the following options:
-  * `:truthy` - Allows additional values, i.e. truthy values to be considered valid booleans by converting them to `true` during validation. Allowed value is an array of binary, number or boolean values. The default is `[true, "true"]`
-  * `:falsy` - Allows additional values, i.e. falsy values to be considered valid booleans by converting them to `false` during validation. Allowed value is an array of binary, number or boolean values. The default is `[false, "false"]`
-
-```
-iex> schema = %{
-...> "new_user" => %Litmus.Type.Boolean{
-...>   truthy: ["1"],
-...>   falsy: ["0"]
-...>  }
-...> }
-iex> params = %{"new_user" => "1"}
-iex> Litmus.validate(params, schema)
-{:ok, %{"new_user" => true}}
-iex> params = %{"new_user" => 0}
-iex> Litmus.validate(params, schema)
-{:error, "new_user must be a boolean"}
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
