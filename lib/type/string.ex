@@ -25,6 +25,7 @@ defmodule Litmus.Type.String do
   @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
+         {:ok, data} <- convert(type, field, data),
          {:ok, data} <- trim(type, field, data),
          {:ok, data} <- min_length_validate(type, field, data),
          {:ok, data} <- max_length_validate(type, field, data),
@@ -34,6 +35,37 @@ defmodule Litmus.Type.String do
     else
       {:error, msg} -> {:error, msg}
     end
+  end
+
+  @spec convert(t, binary, map) :: {:ok, map}
+  defp convert(%__MODULE__{}, field, params) do
+    if Map.has_key?(params, field) and
+         !(is_binary(params[field]) or is_number(params[field]) or is_boolean(params[field])) do
+      {:error, "#{field} must be string"}
+    else
+      if is_binary(params[field]) do
+        {:ok, params}
+      else
+        modified_value = Kernel.inspect(params[field])
+        modified_params = Map.put(params, field, modified_value)
+        {:ok, modified_params}
+      end
+    end
+  end
+
+  @spec trim(t, binary, map) :: {:ok, map}
+  defp trim(%__MODULE__{trim: true}, field, params) do
+    if Map.has_key?(params, field) do
+      trimmed_value = String.trim(params[field])
+      trimmed_params = Map.put(params, field, trimmed_value)
+      {:ok, trimmed_params}
+    else
+      {:ok, params}
+    end
+  end
+
+  defp trim(%__MODULE__{trim: false}, _field, params) do
+    {:ok, params}
   end
 
   @spec min_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
@@ -92,20 +124,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec trim(t, binary, map) :: {:ok, map}
-  defp trim(%__MODULE__{trim: true}, field, params) do
-    if Map.has_key?(params, field) do
-      trimmed_value = String.trim(params[field])
-      trimmed_params = Map.put(params, field, trimmed_value)
-      {:ok, trimmed_params}
-    else
-      {:ok, params}
-    end
-  end
 
-  defp trim(%__MODULE__{trim: false}, _field, params) do
-    {:ok, params}
-  end
 
   defimpl Litmus.Type do
     alias Litmus.Type
