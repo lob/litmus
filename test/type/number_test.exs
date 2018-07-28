@@ -22,6 +22,7 @@ defmodule Litmus.Type.NumberTest do
       data_1 = %{"id" => "6"}
       modified_data = %{"id" => 0.6}
       modified_data_1 = %{"id" => 6}
+
       schema = %{
         "id" => %Litmus.Type.Number{}
       }
@@ -34,6 +35,7 @@ defmodule Litmus.Type.NumberTest do
       field = "id"
       data = %{"id" => "1.a"}
       data_1 = %{"id" => true}
+
       schema = %{
         "id" => %Litmus.Type.Number{}
       }
