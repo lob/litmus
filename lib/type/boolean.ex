@@ -19,31 +19,28 @@ defmodule Litmus.Type.Boolean do
   @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
-         {:ok, data} <- truthy_validate(type, field, data),
-         {:ok, data} <- falsy_validate(type, field, data) do
+         {:ok, data} <- truthy_falsy_validate(type, field, data) do
+        #  {:ok, data} <- falsy_validate(type, field, data) do
       {:ok, data}
     else
       {:error, msg} -> {:error, msg}
     end
   end
 
-  @spec truthy_validate(t, binary, map) :: {:ok, map} | {:error, binary}
-  defp truthy_validate(%__MODULE__{truthy: truthy}, field, params) do
-    if Map.has_key?(params, field) && !(params[field] in Enum.uniq(truthy ++ @truthy_default)) do
-      {:error, "#{field} must be boolean value"}
-    else
-      modified_params = Map.replace!(params, field, true)
-      {:ok, modified_params}
-    end
-  end
+  @spec truthy_falsy_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  defp truthy_falsy_validate(%__MODULE__{falsy: falsy, truthy: truthy}, field, params) do
+    cond do
+      !Map.has_key?(params, field) ->
+        {:ok, params}
 
-  @spec falsy_validate(t, binary, map) :: {:ok, map} | {:error, binary}
-  defp falsy_validate(%__MODULE__{falsy: falsy}, field, params) do
-    if Map.has_key?(params, field) && !(params[field] in Enum.uniq(falsy ++ @falsy_default)) do
-      {:error, "#{field} must be boolean value"}
-    else
-      modified_params = Map.replace!(params, field, false)
-      {:ok, modified_params}
+      params[field] in Enum.uniq(truthy ++ @truthy_default) ->
+        {:ok, Map.replace!(params, field, true)}
+
+      params[field] in Enum.uniq(falsy ++ @falsy_default) ->
+        {:ok, Map.replace!(params, field, false)}
+
+      true ->
+        {:error, "#{field} must be a boolean"}
     end
   end
 
