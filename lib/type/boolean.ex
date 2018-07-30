@@ -20,7 +20,6 @@ defmodule Litmus.Type.Boolean do
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
          {:ok, data} <- truthy_falsy_validate(type, field, data) do
-        #  {:ok, data} <- falsy_validate(type, field, data) do
       {:ok, data}
     else
       {:error, msg} -> {:error, msg}
