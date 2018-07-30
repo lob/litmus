@@ -193,11 +193,7 @@ defmodule Litmus.Type.StringTest do
       modified_data = %{"id" => "1", "new_user" => "true"}
 
       schema = %{
-        "id" => %Litmus.Type.String{
-          regex: %Litmus.Type.String.Regex{
-            pattern: ~r/^[0-9]+$/
-          }
-        },
+        "id" => %Litmus.Type.String{},
         "new_user" => %Litmus.Type.String{}
       }
 
