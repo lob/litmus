@@ -23,13 +23,19 @@ defmodule LitmusTest do
           length: 4,
           required: true,
           trim: true
+        },
+        "pin" => %Litmus.Type.Number{
+          min: 1000,
+          max: 9999,
+          integer: true
         }
       }
 
       req_params = %{
         "id" => "abc",
         "password" => " 1234 ",
-        "user" => "qwerty"
+        "user" => "qwerty",
+        "pin" => 3636
       }
 
       modified_params = Map.replace!(req_params, "password", String.trim(req_params["password"]))
