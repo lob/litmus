@@ -41,9 +41,7 @@ defmodule Litmus.Type.BooleanTest do
         }
       }
 
-      assert Litmus.validate(data, schema) ==
-               {:error,
-                "#{field} must be a boolean"}
+      assert Litmus.validate(data, schema) == {:error, "#{field} must be a boolean"}
     end
   end
 
@@ -71,9 +69,7 @@ defmodule Litmus.Type.BooleanTest do
         }
       }
 
-      assert Litmus.validate(data, schema) ==
-               {:error,
-                "#{field} must be a boolean"}
+      assert Litmus.validate(data, schema) == {:error, "#{field} must be a boolean"}
     end
   end
 end
