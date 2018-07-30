@@ -18,31 +18,30 @@ defmodule Litmus.Type.NumberTest do
 
   describe "convert string to number" do
     test "returns :ok with modified value when convert is true" do
-      data = %{"id" => ".6"}
-      data_1 = %{"id" => "6"}
-      modified_data = %{"id" => 0.6}
-      modified_data_1 = %{"id" => 6}
+      integer_data = %{"id" => ".6"}
+      float_data = %{"id" => "6"}
+      modified_integer_data = %{"id" => 0.6}
+      modified_float_data = %{"id" => 6}
 
       schema = %{
         "id" => %Litmus.Type.Number{},
         "token" => %Litmus.Type.Number{}
       }
 
-      assert Litmus.validate(data, schema) == {:ok, modified_data}
-      assert Litmus.validate(data_1, schema) == {:ok, modified_data_1}
+      assert Litmus.validate(integer_data, schema) == {:ok, modified_integer_data}
+      assert Litmus.validate(float_data, schema) == {:ok, modified_float_data}
     end
 
     test "errors when convert is true and field type is neither number or stringified number" do
-      field = "id"
-      data = %{"id" => "1.a"}
-      data_1 = %{"id" => true}
+      invalid_number = %{"id" => "1.a"}
+      boolean_data = %{"id" => true}
 
       schema = %{
         "id" => %Litmus.Type.Number{}
       }
 
-      assert Litmus.validate(data, schema) == {:error, "#{field} must be a number"}
-      assert Litmus.validate(data_1, schema) == {:error, "#{field} must be a number"}
+      assert Litmus.validate(invalid_number, schema) == {:error, "id must be a number"}
+      assert Litmus.validate(boolean_data, schema) == {:error, "id must be a number"}
     end
   end
 
@@ -61,31 +60,27 @@ defmodule Litmus.Type.NumberTest do
     end
 
     test "errors when field is less than min" do
-      min = 3
-      field = "id"
       data = %{"id" => 1}
 
       schema = %{
         "id" => %Litmus.Type.Number{
           required: true,
-          min: min
+          min: 3
         }
       }
 
-      assert Litmus.validate(data, schema) ==
-               {:error, "#{field} must be greater than or equal to #{min}"}
+      assert Litmus.validate(data, schema) == {:error, "id must be greater than or equal to 3"}
     end
   end
 
   describe "maximum validation" do
     test "returns :ok when field is less than or equal to max" do
-      max = 3
       data = %{"id" => 1}
 
       schema = %{
         "id" => %Litmus.Type.Number{
           required: true,
-          max: max
+          max: 3
         }
       }
 
@@ -93,19 +88,16 @@ defmodule Litmus.Type.NumberTest do
     end
 
     test "errors when field is more than max" do
-      max = 3
-      field = "id"
       data = %{"id" => 6}
 
       schema = %{
         "id" => %Litmus.Type.Number{
           required: true,
-          max: max
+          max: 3
         }
       }
 
-      assert Litmus.validate(data, schema) ==
-               {:error, "#{field} must be less than or equal to #{max}"}
+      assert Litmus.validate(data, schema) == {:error, "id must be less than or equal to 3"}
     end
   end
 
@@ -124,7 +116,6 @@ defmodule Litmus.Type.NumberTest do
     end
 
     test "errors when field is not an integer and the schema property integer is set to true" do
-      field = "id"
       data = %{"id" => 1.6}
 
       schema = %{
@@ -134,7 +125,7 @@ defmodule Litmus.Type.NumberTest do
         }
       }
 
-      assert Litmus.validate(data, schema) == {:error, "#{field} must be an integer"}
+      assert Litmus.validate(data, schema) == {:error, "id must be an integer"}
     end
   end
 end

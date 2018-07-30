@@ -1,7 +1,7 @@
 defmodule Litmus.Type.Number do
-  @moduledoc """
-  Schema and validation for Number data type.
-  """
+  @moduledoc false
+
+  @number_regex ~r/^[+-]?([0-9]*[.])?[0-9]+$/
 
   defstruct [
     :min,
@@ -11,8 +11,8 @@ defmodule Litmus.Type.Number do
   ]
 
   @type t :: %__MODULE__{
-          min: non_neg_integer | nil,
-          max: non_neg_integer | nil,
+          min: number | nil,
+          max: number | nil,
           integer: boolean,
           required: boolean
         }
@@ -32,22 +32,37 @@ defmodule Litmus.Type.Number do
     end
   end
 
-  @spec string_to_number(binary) :: number | :error
+  @spec string_to_number(binary) :: number | nil
   defp string_to_number(str) do
-    modified_str =
-      try do
-        String.to_integer(str)
-      rescue
-        ArgumentError ->
-          try do
-            String.to_float("0" <> str)
-          rescue
-            ArgumentError ->
-              :error
-          end
+    str =
+      if String.starts_with?(str, ".") do
+        "0" <> str
+      else
+        str
       end
 
-    modified_str
+    cond do
+      !Regex.match?(@number_regex, str) -> nil
+      int = string_to_integer(str) -> int
+      float = string_to_float(str) -> float
+      true -> nil
+    end
+  end
+
+  @spec string_to_integer(binary) :: number | nil
+  defp string_to_integer(str) do
+    case Integer.parse(str) do
+      {modified_str, ""} -> modified_str
+      _ -> nil
+    end
+  end
+
+  @spec string_to_float(binary) :: number | nil
+  defp string_to_float(str) do
+    case Float.parse(str) do
+      {modified_str, ""} -> modified_str
+      _ -> nil
+    end
   end
 
   @spec convert(t, binary, map) :: {:ok, map} | {:error, binary}
@@ -59,16 +74,9 @@ defmodule Litmus.Type.Number do
       is_number(params[field]) ->
         {:ok, params}
 
-      is_binary(params[field]) ->
+      is_binary(params[field]) && string_to_number(params[field]) ->
         modified_value = string_to_number(params[field])
-
-        case modified_value do
-          :error ->
-            {:error, "#{field} must be a number"}
-
-          _ ->
-            {:ok, Map.put(params, field, modified_value)}
-        end
+        {:ok, Map.put(params, field, modified_value)}
 
       true ->
         {:error, "#{field} must be a number"}
@@ -94,7 +102,7 @@ defmodule Litmus.Type.Number do
   end
 
   defp min_validate(%__MODULE__{min: min}, field, params)
-       when is_number(min) and min >= 0 do
+       when is_number(min) do
     if Map.has_key?(params, field) && params[field] < min do
       {:error, "#{field} must be greater than or equal to #{min}"}
     else
@@ -108,7 +116,7 @@ defmodule Litmus.Type.Number do
   end
 
   defp max_validate(%__MODULE__{max: max}, field, params)
-       when is_number(max) and max >= 0 do
+       when is_number(max) do
     if Map.has_key?(params, field) && params[field] > max do
       {:error, "#{field} must be less than or equal to #{max}"}
     else
