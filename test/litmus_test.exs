@@ -24,7 +24,7 @@ defmodule LitmusTest do
           required: true,
           trim: true
         },
-        "field1" => %Litmus.Type.String{}
+        "dob" => %Litmus.Type.String{}
       }
 
       req_params = %{

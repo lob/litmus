@@ -40,19 +40,19 @@ defmodule Litmus.Type.String do
   @spec convert(t, binary, map) :: {:ok, map}
   defp convert(%__MODULE__{}, field, params) do
     cond do
+      !Map.has_key?(params, field) ->
+        {:ok, params}
+
       is_binary(params[field]) ->
         {:ok, params}
 
       is_number(params[field]) or is_boolean(params[field]) ->
-        modified_value = Kernel.inspect(params[field])
+        modified_value = to_string(params[field])
         modified_params = Map.put(params, field, modified_value)
         {:ok, modified_params}
 
-      Map.has_key?(params, field) ->
-        {:error, "#{field} must be string"}
-
       true ->
-        {:ok, params}
+        {:error, "#{field} must be string"}
     end
   end
 
