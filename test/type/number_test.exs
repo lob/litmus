@@ -24,7 +24,8 @@ defmodule Litmus.Type.NumberTest do
       modified_data_1 = %{"id" => 6}
 
       schema = %{
-        "id" => %Litmus.Type.Number{}
+        "id" => %Litmus.Type.Number{},
+        "token" => %Litmus.Type.Number{}
       }
 
       assert Litmus.validate(data, schema) == {:ok, modified_data}
