@@ -191,15 +191,14 @@ defmodule Litmus.Type.StringTest do
     test "returns :ok with new parameters having values converted to string when field is boolean or number" do
       data = %{"id" => 1, "new_user" => true}
       modified_data = %{"id" => "1", "new_user" => "true"}
-      data_1 = %{}
 
       schema = %{
         "id" => %Litmus.Type.String{},
-        "new_user" => %Litmus.Type.String{}
+        "new_user" => %Litmus.Type.String{},
+        "description" => %Litmus.Type.String{}
       }
 
       assert Litmus.validate(data, schema) == {:ok, modified_data}
-      assert Litmus.validate(data_1, schema) == {:ok, data_1}
     end
 
     test "returns :error when field is neither string nor boolean nor number" do
