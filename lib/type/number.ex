@@ -67,8 +67,7 @@ defmodule Litmus.Type.Number do
             {:error, "#{field} must be a number"}
 
           _ ->
-            modified_params = Map.put(params, field, modified_value)
-            {:ok, modified_params}
+            {:ok, Map.put(params, field, modified_value)}
         end
 
       true ->
