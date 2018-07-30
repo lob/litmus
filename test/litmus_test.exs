@@ -23,8 +23,7 @@ defmodule LitmusTest do
           length: 4,
           required: true,
           trim: true
-        },
-        "dob" => %Litmus.Type.String{}
+        }
       }
 
       req_params = %{

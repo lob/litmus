@@ -47,9 +47,7 @@ defmodule Litmus.Type.String do
         {:ok, params}
 
       is_number(params[field]) or is_boolean(params[field]) ->
-        modified_value = to_string(params[field])
-        modified_params = Map.put(params, field, modified_value)
-        {:ok, modified_params}
+        {:ok, Map.update!(params, field, &to_string/1)}
 
       true ->
         {:error, "#{field} must be string"}
