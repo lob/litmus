@@ -25,6 +25,7 @@ defmodule Litmus.Type.String do
   @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
+         {:ok, data} <- convert(type, field, data),
          {:ok, data} <- trim(type, field, data),
          {:ok, data} <- min_length_validate(type, field, data),
          {:ok, data} <- max_length_validate(type, field, data),
@@ -33,6 +34,23 @@ defmodule Litmus.Type.String do
       {:ok, data}
     else
       {:error, msg} -> {:error, msg}
+    end
+  end
+
+  @spec convert(t, binary, map) :: {:ok, map}
+  defp convert(%__MODULE__{}, field, params) do
+    cond do
+      !Map.has_key?(params, field) ->
+        {:ok, params}
+
+      is_binary(params[field]) ->
+        {:ok, params}
+
+      is_number(params[field]) or is_boolean(params[field]) ->
+        {:ok, Map.update!(params, field, &to_string/1)}
+
+      true ->
+        {:error, "#{field} must be string"}
     end
   end
 
