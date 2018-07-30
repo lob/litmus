@@ -52,12 +52,14 @@ defmodule Litmus.Type.Number do
 
   @spec convert(t, binary, map) :: {:ok, map} | {:error, binary}
   defp convert(%__MODULE__{}, field, params) do
-    if Map.has_key?(params, field) and !(is_binary(params[field]) or is_number(params[field])) do
-      {:error, "#{field} must be a number"}
-    else
-      if is_number(params[field]) do
+    cond do
+      !Map.has_key?(params, field) ->
         {:ok, params}
-      else
+
+      is_number(params[field]) ->
+        {:ok, params}
+
+      is_binary(params[field]) ->
         modified_value = string_to_number(params[field])
 
         case modified_value do
@@ -68,7 +70,9 @@ defmodule Litmus.Type.Number do
             modified_params = Map.put(params, field, modified_value)
             {:ok, modified_params}
         end
-      end
+
+      true ->
+        {:error, "#{field} must be a number"}
     end
   end
 
