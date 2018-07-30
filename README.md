@@ -59,7 +59,7 @@ iex> Litmus.validate(params, schema)
 
 ### Litmus.Type.String
 
-The `String` module contains options that will validate String data types. It converts `boolean` and `number` data to type `string`. It supports the following options:
+The `String` module contains options that will validate String data types. It converts boolean and number values to strings. It supports the following options:
   * `:min_length` - Specifies the minimum number of characters needed in the string. Allowed values are non-negative integers.
   * `:max_length` - Specifies the maximum number of characters needed in the string. Allowed values are non-negative integers.
   * `:length` - Specifies the exact number of characters needed in the string. Allowed values are non-negative integers.
