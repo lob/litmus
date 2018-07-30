@@ -82,7 +82,7 @@ iex> Litmus.validate(params, schema)
 
 ### Litmus.Type.Number
 
-The `Number` module contains options that will validate Number data types. It supports the following options:
+The `Number` module contains options that will validate Number data types. It converts "stringified" numerical values to numbers. It supports the following options:
   * `:min` - Specifies the minimum value of the field. Allowed values are non-negative integers.
   * `:max` - Specifies the maximum value of the field. Allowed values are non-negative integers.
   * `:integer` - Specifies that the number must be an integer (no floating point). Allowed values are `true` and `false`. The default is `false`.
