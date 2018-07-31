@@ -26,9 +26,9 @@ defmodule Litmus.Type.Boolean do
     end
   end
 
-  @spec check_boolean_values(term, [term], [term]) :: true | nil
-  def check_boolean_values(initial_value, additional_values, default_values)
-      when is_binary(initial_value) do
+  @spec check_boolean_values(term, [term], [term]) :: boolean
+  defp check_boolean_values(initial_value, additional_values, default_values)
+       when is_binary(initial_value) do
     allowed_values =
       additional_values
       |> (&(&1 ++ default_values)).()
@@ -39,10 +39,10 @@ defmodule Litmus.Type.Boolean do
         end
       end)
 
-    if String.downcase(initial_value) in allowed_values, do: true
+    if String.downcase(initial_value) in allowed_values, do: true, else: false
   end
 
-  def check_boolean_values(initial_value, additional_values, default_values) do
+  defp check_boolean_values(initial_value, additional_values, default_values) do
     if initial_value in Enum.uniq(additional_values ++ default_values), do: true
   end
 

@@ -4,7 +4,7 @@ defmodule Litmus.Type.BooleanTest do
   alias Litmus.Type
 
   describe "validate_field/3" do
-    test "validates property values of data based on their Boolean schema definition in Type.Boolean module" do
+    test "validates Type.Boolean fields in a schema" do
       field = "id_given"
       data = %{"id_given" => true}
 
