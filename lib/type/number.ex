@@ -1,8 +1,6 @@
 defmodule Litmus.Type.Number do
   @moduledoc false
 
-  @number_regex ~r/^[+-]?([0-9]*[.])?[0-9]+$/
-
   defstruct [
     :min,
     :max,
