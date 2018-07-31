@@ -39,11 +39,11 @@ defmodule Litmus.Type.Boolean do
         end
       end)
 
-    if String.downcase(initial_value) in allowed_values, do: true, else: false
+    String.downcase(initial_value) in allowed_values
   end
 
   defp check_boolean_values(initial_value, additional_values, default_values) do
-    if initial_value in Enum.uniq(additional_values ++ default_values), do: true
+    initial_value in Enum.uniq(additional_values ++ default_values)
   end
 
   @spec truthy_falsy_validate(t, binary, map) :: {:ok, map} | {:error, binary}
