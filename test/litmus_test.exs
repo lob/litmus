@@ -28,6 +28,10 @@ defmodule LitmusTest do
           min: 1000,
           max: 9999,
           integer: true
+        },
+        "remember_me" => %Litmus.Type.Boolean{
+          truthy: [1],
+          falsy: [0]
         }
       }
 
@@ -35,10 +39,12 @@ defmodule LitmusTest do
         "id" => "abc",
         "password" => " 1234 ",
         "user" => "qwerty",
-        "pin" => 3636
+        "pin" => 3636,
+        "remember_me" => 1
       }
 
       modified_params = Map.replace!(req_params, "password", String.trim(req_params["password"]))
+      modified_params = Map.replace!(modified_params, "remember_me", true)
 
       assert Litmus.validate(req_params, login_schema) == {:ok, modified_params}
     end
