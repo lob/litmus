@@ -32,34 +32,6 @@ defmodule Litmus.Type.Number do
     end
   end
 
-  @spec string_to_number(binary) :: number | nil
-  defp string_to_number(str) do
-    str = if String.starts_with?(str, "."), do: "0" <> str, else: str
-
-    cond do
-      !Regex.match?(@number_regex, str) -> nil
-      int = string_to_integer(str) -> int
-      float = string_to_float(str) -> float
-      true -> nil
-    end
-  end
-
-  @spec string_to_integer(binary) :: number | nil
-  defp string_to_integer(str) do
-    case Integer.parse(str) do
-      {modified_str, ""} -> modified_str
-      _ -> nil
-    end
-  end
-
-  @spec string_to_float(binary) :: number | nil
-  defp string_to_float(str) do
-    case Float.parse(str) do
-      {modified_str, ""} -> modified_str
-      _ -> nil
-    end
-  end
-
   @spec convert(t, binary, map) :: {:ok, map} | {:error, binary}
   defp convert(%__MODULE__{}, field, params) do
     cond do
@@ -75,6 +47,33 @@ defmodule Litmus.Type.Number do
 
       true ->
         {:error, "#{field} must be a number"}
+    end
+  end
+
+  @spec string_to_number(binary) :: number | nil
+  defp string_to_number(str) do
+    str = if String.starts_with?(str, "."), do: "0" <> str, else: str
+
+    cond do
+      int = string_to_integer(str) -> int
+      float = string_to_float(str) -> float
+      true -> nil
+    end
+  end
+
+  @spec string_to_integer(binary) :: number | nil
+  defp string_to_integer(str) do
+    case Integer.parse(str) do
+      {num, ""} -> num
+      _ -> nil
+    end
+  end
+
+  @spec string_to_float(binary) :: number | nil
+  defp string_to_float(str) do
+    case Float.parse(str) do
+      {num, ""} -> num
+      _ -> nil
     end
   end
 

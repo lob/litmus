@@ -24,15 +24,14 @@ defmodule Litmus.Type.NumberTest do
       modified_integer_data = %{"id" => 6}
 
       schema = %{
-        "id" => %Litmus.Type.Number{},
-        "token" => %Litmus.Type.Number{}
+        "id" => %Litmus.Type.Number{}
       }
 
       assert Litmus.validate(integer_data, schema) == {:ok, modified_integer_data}
       assert Litmus.validate(float_data, schema) == {:ok, modified_float_data}
     end
 
-    test "errors field type is neither number or stringified number" do
+    test "errors if field type is neither number or stringified number" do
       invalid_number = %{"id" => "1.a"}
       boolean_data = %{"id" => true}
 
@@ -115,7 +114,7 @@ defmodule Litmus.Type.NumberTest do
       assert Litmus.validate(data, schema) == {:ok, data}
     end
 
-    test "errors when field is not an integer and the schema property integer is set to true" do
+    test "errors when field is a float and the schema property integer is set to true" do
       data = %{"id" => 1.6}
 
       schema = %{
