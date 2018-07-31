@@ -26,31 +26,24 @@ defmodule Litmus.Type.Boolean do
     end
   end
 
-  @spec check_boolean_values(term, [term], [term]) :: {:ok, map} | nil
+  @spec check_boolean_values(term, [term], [term]) :: true | nil
   def check_boolean_values(initial_value, additional_values, default_values)
       when is_binary(initial_value) do
-    allowed_values = Enum.uniq(additional_values ++ default_values)
-
     allowed_values =
-      Enum.map(allowed_values, fn item ->
+      additional_values
+      |> (&(&1 ++ default_values)).()
+      |> Enum.uniq()
+      |> Enum.map(fn item ->
         if is_binary(item) do
           String.downcase(item)
         end
       end)
 
-    if String.downcase(initial_value) in allowed_values do
-      true
-    else
-      nil
-    end
+    if String.downcase(initial_value) in allowed_values, do: true
   end
 
   def check_boolean_values(initial_value, additional_values, default_values) do
-    if initial_value in Enum.uniq(additional_values ++ default_values) do
-      true
-    else
-      nil
-    end
+    if initial_value in Enum.uniq(additional_values ++ default_values), do: true
   end
 
   @spec truthy_falsy_validate(t, binary, map) :: {:ok, map} | {:error, binary}
