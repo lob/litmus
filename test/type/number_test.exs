@@ -4,7 +4,7 @@ defmodule Litmus.Type.NumberTest do
   alias Litmus.Type
 
   describe "validate_field/3" do
-    test "validates property values of data based on their Number schema definition in Type.Number module" do
+    test "validates Type.Number fields in a schema" do
       field = "id"
       data = %{"id" => 1}
 
@@ -17,11 +17,11 @@ defmodule Litmus.Type.NumberTest do
   end
 
   describe "convert string to number" do
-    test "returns :ok with modified value when convert is true" do
-      integer_data = %{"id" => ".6"}
-      float_data = %{"id" => "6"}
-      modified_integer_data = %{"id" => 0.6}
-      modified_float_data = %{"id" => 6}
+    test "returns :ok with modified value" do
+      float_data = %{"id" => ".6"}
+      integer_data = %{"id" => "6"}
+      modified_float_data = %{"id" => 0.6}
+      modified_integer_data = %{"id" => 6}
 
       schema = %{
         "id" => %Litmus.Type.Number{},
@@ -32,7 +32,7 @@ defmodule Litmus.Type.NumberTest do
       assert Litmus.validate(float_data, schema) == {:ok, modified_float_data}
     end
 
-    test "errors when convert is true and field type is neither number or stringified number" do
+    test "errors field type is neither number or stringified number" do
       invalid_number = %{"id" => "1.a"}
       boolean_data = %{"id" => true}
 

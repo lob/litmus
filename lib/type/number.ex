@@ -34,12 +34,7 @@ defmodule Litmus.Type.Number do
 
   @spec string_to_number(binary) :: number | nil
   defp string_to_number(str) do
-    str =
-      if String.starts_with?(str, ".") do
-        "0" <> str
-      else
-        str
-      end
+    str = if String.starts_with?(str, "."), do: "0" <> str, else: str
 
     cond do
       !Regex.match?(@number_regex, str) -> nil
