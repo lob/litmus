@@ -77,8 +77,8 @@ iex> Litmus.validate(params, schema)
 ### Litmus.Type.Boolean
 
 The `Boolean` module contains options that will validate Boolean data types. It converts truthy and falsy values to `true` or `false`. It supports the following options:
-  * `:truthy` - Allows additional values, i.e. truthy values to be considered valid booleans by converting them to `true` during validation. Allowed value is an array of binary, number or boolean values. The default is `[true, "true"]`
-  * `:falsy` - Allows additional values, i.e. falsy values to be considered valid booleans by converting them to `false` during validation. Allowed value is an array of binary, number or boolean values. The default is `[false, "false"]`
+  * `:truthy` - Allows additional values, i.e. truthy values to be considered valid booleans by converting them to `true` during validation. Allowed value is an array of strings, number or boolean values. The default is `[true, "true"]`
+  * `:falsy` - Allows additional values, i.e. falsy values to be considered valid booleans by converting them to `false` during validation. Allowed value is an array of strings, number or boolean values. The default is `[false, "false"]`
 
 ```
 iex> schema = %{
@@ -126,7 +126,7 @@ The `String` module contains options that will validate String data types. It co
   * `:min_length` - Specifies the minimum number of characters needed in the string. Allowed values are non-negative integers.
   * `:max_length` - Specifies the maximum number of characters needed in the string. Allowed values are non-negative integers.
   * `:length` - Specifies the exact number of characters needed in the string. Allowed values are non-negative integers.
-  * `:regex` - Specifies a Regular expression that a string must match. Allowed value is a struct consisting of `pattern` and `error_message`, where `pattern` is a `Regex` and `error_message` is a `binary` value. Default value for pattern is `nil`. If no error_message is given, the default message returned on error is `"#{field} must be in a valid format"`.
+  * `:regex` - Specifies a Regular expression that a string must match. Allowed value is a struct consisting of `pattern` and `error_message`, where `pattern` is a `Regex` and `error_message` is a `String.t()` value. Default value for pattern is `nil`. If no error_message is given, the default message returned on error is `"#{field} must be in a valid format"`.
   * `:trim` - Removes additional whitespaces in a string and returns the new value. Allowed values are `true` and `false`. The default is `false`.
 
 ```
@@ -155,4 +155,3 @@ iex> Litmus.validate(params, schema)
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/litmus](https://hexdocs.pm/litmus).
-

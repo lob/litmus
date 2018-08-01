@@ -22,7 +22,7 @@ defmodule Litmus.Type.String do
           required: boolean
         }
 
-  @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
          {:ok, data} <- convert(type, field, data),
@@ -37,7 +37,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec convert(t, binary, map) :: {:ok, map}
+  @spec convert(t, String.t(), map) :: {:ok, map}
   defp convert(%__MODULE__{}, field, params) do
     cond do
       !Map.has_key?(params, field) ->
@@ -54,7 +54,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec min_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec min_length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp min_length_validate(%__MODULE__{min_length: nil}, _field, params) do
     {:ok, params}
   end
@@ -68,7 +68,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec max_length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec max_length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp max_length_validate(%__MODULE__{max_length: nil}, _field, params) do
     {:ok, params}
   end
@@ -82,7 +82,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec length_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp length_validate(%__MODULE__{length: nil}, _field, params) do
     {:ok, params}
   end
@@ -96,7 +96,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec regex_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec regex_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp regex_validate(%__MODULE__{regex: %{pattern: nil}}, _field, params) do
     {:ok, params}
   end
@@ -110,7 +110,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec trim(t, binary, map) :: {:ok, map}
+  @spec trim(t, String.t(), map) :: {:ok, map}
   defp trim(%__MODULE__{trim: true}, field, params) do
     if Map.has_key?(params, field) do
       trimmed_value = String.trim(params[field])
@@ -128,7 +128,7 @@ defmodule Litmus.Type.String do
   defimpl Litmus.Type do
     alias Litmus.Type
 
-    @spec validate(Type.t(), binary, map) :: {:ok, map} | {:error, binary}
+    @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
     def validate(type, field, data), do: Type.String.validate_field(type, field, data)
   end
 end

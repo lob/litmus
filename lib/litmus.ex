@@ -6,7 +6,7 @@ defmodule Litmus do
   @doc """
   Validate data based on a schema.
   """
-  @spec validate(map, map) :: {:ok, map} | {:error, binary}
+  @spec validate(map, map) :: {:ok, map} | {:error, String.t()}
   def validate(data, schema) do
     case validate_allowed_params(data, schema) do
       :ok -> validate_schema(data, schema)
@@ -14,7 +14,7 @@ defmodule Litmus do
     end
   end
 
-  @spec validate_allowed_params(map, map) :: :ok | {:error, binary}
+  @spec validate_allowed_params(map, map) :: :ok | {:error, String.t()}
   defp validate_allowed_params(data, schema) do
     result = Map.keys(data) -- Map.keys(schema)
 
@@ -24,7 +24,7 @@ defmodule Litmus do
     end
   end
 
-  @spec validate_schema(map, map) :: {:ok, map} | {:error, binary}
+  @spec validate_schema(map, map) :: {:ok, map} | {:error, String.t()}
   defp validate_schema(data, schema) do
     Enum.reduce_while(schema, {:ok, data}, fn {field, type}, {:ok, modified_data} ->
       case Type.validate(type, field, modified_data) do
