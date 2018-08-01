@@ -24,10 +24,25 @@ If the data is valid, the function returns `{:ok, data}`. The data returned will
 If the data passed does not follow the rules defined in the schema, the function returns `{:error, error_message}`. It will also return an error when receiving a field that has not been specified in the provided schema.
 
 ```elixir
-iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
-iex> params = %{"id" => 1}
+iex> schema = %{
+...> "id" => %Litmus.Type.Any{required: true},
+...> "username" => %Litmus.Type.String{
+...>   min_length: 6,
+...>   required: true
+...> },
+...> "pin" => %Litmus.Type.Number{
+...>   min: 1000,
+...>   max: 9999,
+...>   required: true
+...> },
+...> "new_user" => %Litmus.Type.Boolean{
+...>   truthy: ["1"],
+...>   falsy: ["0"]
+...>  }
+...> }
+iex> params = %{"id" => 1, "username" => "user@123", "pin" => 1234, "new_user" => "1"}
 iex> Litmus.validate(params, schema)
-{:ok, %{"id" => 1}}
+{:ok, %{"id" => 1, "new_user" => true, "pin" => 1234, "username" => "user@123"}}
 
 iex> schema = %{"id" => %Litmus.Type.Any{}}
 iex> params = %{"password" =>  1}
