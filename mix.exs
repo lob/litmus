@@ -14,15 +14,15 @@ defmodule Litmus.MixProject do
 
       # Docs
       name: "litmus",
-      description: "Data schema validation in elixir",
+      description: "Data validation in elixir",
       source_url: @github_url,
       homepage_url: @github_url,
-      files: ~w(mix.exs lib LICENSE.md README.md CHANGELOG.md),
       docs: [
         main: "Litmus",
         extras: ["README.md"]
       ],
       package: [
+        files: ~w(mix.exs lib LICENSE.md README.md CHANGELOG.md),
         maintainers: ["Lob"],
         licenses: ["MIT"],
         links: %{
