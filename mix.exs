@@ -22,7 +22,7 @@ defmodule Litmus.MixProject do
         extras: ["README.md"]
       ],
       package: [
-        files: ~w(mix.exs lib LICENSE.md README.md CHANGELOG.md),
+        files: ~w(mix.exs lib LICENSE* README.md CHANGELOG.md),
         maintainers: ["Lob"],
         licenses: ["MIT"],
         links: %{

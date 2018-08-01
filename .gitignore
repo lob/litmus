@@ -24,4 +24,4 @@ litmus-*.tar
 
 .elixir_ls/
 .DS_Store
-
+package.json
