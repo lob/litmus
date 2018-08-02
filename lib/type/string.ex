@@ -43,6 +43,9 @@ defmodule Litmus.Type.String do
       !Map.has_key?(params, field) ->
         {:ok, params}
 
+      is_nil(params[field]) ->
+        {:ok, Map.put(params, field, "")}
+
       is_binary(params[field]) ->
         {:ok, params}
 
@@ -50,7 +53,7 @@ defmodule Litmus.Type.String do
         {:ok, Map.update!(params, field, &to_string/1)}
 
       true ->
-        {:error, "#{field} must be string"}
+        {:error, "#{field} must be a string"}
     end
   end
 
