@@ -1,3 +1,13 @@
+#### 0.1.1 (2018-08-02)
+
+##### Chores
+
+* **spec:**  changes binary to String.t() ([#14](https://github.com/lob/litmus/pull/14)) ([f4f7eb23](https://github.com/lob/litmus/commit/f4f7eb23cf21c9d09127eb1f653afb0d013a7169))
+
+##### Bug Fixes
+
+* **allow-nil:**  Convert nil value of data to empty string ([#15](https://github.com/lob/litmus/pull/15)) ([81e570c6](https://github.com/lob/litmus/commit/81e570c600492807fef73a2ac9c47d7c24232ef6))
+
 ### 0.1.0 (2018-08-01)
 
 ##### Chores
