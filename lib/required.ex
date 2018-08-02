@@ -1,7 +1,7 @@
 defmodule Litmus.Required do
   @moduledoc false
 
-  @spec validate(map, binary, map) :: {:ok, map} | {:error, binary}
+  @spec validate(map, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate(%{required: true}, field, params) do
     if Map.has_key?(params, field) do
       {:ok, params}
