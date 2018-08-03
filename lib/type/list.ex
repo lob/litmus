@@ -90,7 +90,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec type_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec type_validate(t, String.t() | atom, map) :: {:ok, map} | {:error, String.t()}
   defp type_validate(%__MODULE__{type: nil}, _field, params) do
     {:ok, params}
   end
