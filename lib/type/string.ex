@@ -37,7 +37,7 @@ defmodule Litmus.Type.String do
     end
   end
 
-  @spec convert(t, String.t(), map) :: {:ok, map}
+  @spec convert(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp convert(%__MODULE__{}, field, params) do
     cond do
       !Map.has_key?(params, field) ->

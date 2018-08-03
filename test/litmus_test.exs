@@ -32,6 +32,11 @@ defmodule LitmusTest do
         "remember_me" => %Litmus.Type.Boolean{
           truthy: [1],
           falsy: [0]
+        },
+        "account_ids" => %Litmus.Type.List{
+          type: "number",
+          min_length: 2,
+          max_length: 5
         }
       }
 
@@ -40,7 +45,8 @@ defmodule LitmusTest do
         "password" => " 1234 ",
         "user" => "qwerty",
         "pin" => 3636,
-        "remember_me" => 1
+        "remember_me" => 1,
+        "account_ids" => [523, 524, 599]
       }
 
       modified_params = Map.replace!(req_params, "password", String.trim(req_params["password"]))
