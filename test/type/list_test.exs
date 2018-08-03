@@ -171,16 +171,17 @@ defmodule Litmus.Type.ListTest do
     end
 
     test "errors if field elements are not of the type specified" do
-      data = %{"id" => [1, 2, "3"]}
+      data = %{"id" => [1, 2, "3", :a, true]}
 
-      schema = %{
-        "id" => %Litmus.Type.List{
-          required: true,
-          type: "number"
-        }
-      }
+      schema_atom = %{"id" => %Litmus.Type.List{type: "atom"}}
+      schema_boolean = %{"id" => %Litmus.Type.List{type: "boolean"}}
+      schema_number = %{"id" => %Litmus.Type.List{type: "number"}}
+      schema_string = %{"id" => %Litmus.Type.List{type: "string"}}
 
-      assert Litmus.validate(data, schema) == {:error, "id must be a list of numbers"}
+      assert Litmus.validate(data, schema_atom) == {:error, "id must be a list of atoms"}
+      assert Litmus.validate(data, schema_boolean) == {:error, "id must be a list of boolean"}
+      assert Litmus.validate(data, schema_number) == {:error, "id must be a list of numbers"}
+      assert Litmus.validate(data, schema_string) == {:error, "id must be a list of strings"}
     end
   end
 end
