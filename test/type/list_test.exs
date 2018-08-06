@@ -145,26 +145,28 @@ defmodule Litmus.Type.ListTest do
         "id_atom" => [:a, :b],
         "id_boolean" => [true, false],
         "id_number" => [1, 2],
-        "id_string" => ["a", "b"]
+        "id_string" => ["a", "b"],
+        "id_any" => [1, "a"]
       }
 
       schema = %{
         "id_atom" => %Litmus.Type.List{
           required: true,
-          type: "atom"
+          type: :atom
         },
         "id_boolean" => %Litmus.Type.List{
           required: true,
-          type: "boolean"
+          type: :boolean
         },
         "id_number" => %Litmus.Type.List{
           required: true,
-          type: "number"
+          type: :number
         },
         "id_string" => %Litmus.Type.List{
           required: true,
-          type: "string"
-        }
+          type: :string
+        },
+        "id_any" => %Litmus.Type.List{}
       }
 
       assert Litmus.validate(data, schema) == {:ok, data}
@@ -173,10 +175,10 @@ defmodule Litmus.Type.ListTest do
     test "errors if field elements are not of the type specified" do
       data = %{"id" => [1, 2, "3", :a, true]}
 
-      schema_atom = %{"id" => %Litmus.Type.List{type: "atom"}}
-      schema_boolean = %{"id" => %Litmus.Type.List{type: "boolean"}}
-      schema_number = %{"id" => %Litmus.Type.List{type: "number"}}
-      schema_string = %{"id" => %Litmus.Type.List{type: "string"}}
+      schema_atom = %{"id" => %Litmus.Type.List{type: :atom}}
+      schema_boolean = %{"id" => %Litmus.Type.List{type: :boolean}}
+      schema_number = %{"id" => %Litmus.Type.List{type: :number}}
+      schema_string = %{"id" => %Litmus.Type.List{type: :string}}
 
       assert Litmus.validate(data, schema_atom) == {:error, "id must be a list of atoms"}
       assert Litmus.validate(data, schema_boolean) == {:error, "id must be a list of boolean"}

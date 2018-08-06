@@ -34,7 +34,7 @@ defmodule LitmusTest do
           falsy: [0]
         },
         "account_ids" => %Litmus.Type.List{
-          type: "number",
+          type: :number,
           min_length: 2,
           max_length: 5
         }

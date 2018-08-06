@@ -41,7 +41,7 @@ iex> schema = %{
 ...>  },
 ...> "account_ids" => %Litmus.Type.List{
 ...>   max_length: 3,
-...>   type: "number"
+...>   type: :number
 ...>  }
 ...> }
 iex> params = %{"id" => 1, "username" => "user@123", "pin" => 1234, "new_user" => "1", "account_ids" => [1, 3, 9]}
@@ -106,7 +106,7 @@ The `List` module contains options that will validate List data types. It suppor
   * `:min_length` - Specifies the minimum list length. Allowed values are non-negative integers.
   * `:max_length` - Specifies the maximum list length. Allowed values are non-negative integers.
   * `:length` - Specifies the exact list length. Allowed values are non-negative integers.
-  * `:type` - Specifies the data type of elements in the list. Allowed values are binary or atom. Allowed data types are `atom, boolean, number and string`. Default value is `nil`. If `nil`, any element type is allowed in the list.
+  * `:type` - Specifies the data type of elements in the list. Allowed values are are atoms `:atom, :boolean, :number and :string`. Default value is `nil`. If `nil`, any element type is allowed in the list.
 
 ```
 iex> schema = %{
@@ -116,7 +116,7 @@ iex> schema = %{
 ...> },
 ...> "course_numbers" => %Litmus.Type.List{
 ...>   length: 3,
-...>   type: "number"
+...>   type: :number
 ...>  }
 ...> }
 iex> params = %{"ids" => [1, "a"], "course_numbers" => [500, 523, 599]}

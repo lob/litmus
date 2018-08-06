@@ -96,24 +96,17 @@ defmodule Litmus.Type.List do
   end
 
   defp type_validate(%__MODULE__{type: type}, field, params) do
-    cond do
-      type in ["atom", :atom] ->
-        check_if_atom(params, field)
-
-      type in ["boolean", :boolean] ->
-        check_if_boolean(params, field)
-
-      type in ["number", :number] ->
-        check_if_number(params, field)
-
-      type in ["string", :string] ->
-        check_if_string(params, field)
+    case type do
+      :atom -> check_if_atom(params, field)
+      :boolean -> check_if_boolean(params, field)
+      :number -> check_if_number(params, field)
+      :string -> check_if_string(params, field)
     end
   end
 
   @spec check_if_atom(map, String.t()) :: {:ok, map} | {:error, String.t()}
   defp check_if_atom(params, field) do
-    if Enum.filter(params[field], &(!is_atom(&1))) == [] do
+    if Enum.all?(params[field], &is_atom/1) do
       {:ok, params}
     else
       {:error, "#{field} must be a list of atoms"}
@@ -122,7 +115,7 @@ defmodule Litmus.Type.List do
 
   @spec check_if_boolean(map, String.t()) :: {:ok, map} | {:error, String.t()}
   defp check_if_boolean(params, field) do
-    if Enum.filter(params[field], &(!is_boolean(&1))) == [] do
+    if Enum.all?(params[field], &is_boolean/1) do
       {:ok, params}
     else
       {:error, "#{field} must be a list of boolean"}
@@ -131,7 +124,7 @@ defmodule Litmus.Type.List do
 
   @spec check_if_number(map, String.t()) :: {:ok, map} | {:error, String.t()}
   defp check_if_number(params, field) do
-    if Enum.filter(params[field], &(!is_number(&1))) == [] do
+    if Enum.all?(params[field], &is_number/1) do
       {:ok, params}
     else
       {:error, "#{field} must be a list of numbers"}
@@ -140,7 +133,7 @@ defmodule Litmus.Type.List do
 
   @spec check_if_string(map, String.t()) :: {:ok, map} | {:error, String.t()}
   defp check_if_string(params, field) do
-    if Enum.filter(params[field], &(!is_binary(&1))) == [] do
+    if Enum.all?(params[field], &is_binary/1) do
       {:ok, params}
     else
       {:error, "#{field} must be a list of strings"}
