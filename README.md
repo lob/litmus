@@ -10,7 +10,7 @@ by adding `litmus` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:litmus, "~> 0.1.0"}
+    {:litmus, "~> 0.2.0"}
   ]
 end
 ```

@@ -1,3 +1,9 @@
+### 0.2.0 (2018-08-06)
+
+##### New Features
+
+* **list-validation:**  Added validation functions and test cases for List data type ([#16](https://github.com/lob/litmus/pull/16)) ([d1977270](https://github.com/lob/litmus/commit/d1977270dc746788966543d646b6612b8621bd09))
+
 #### 0.1.1 (2018-08-02)
 
 ##### Chores
