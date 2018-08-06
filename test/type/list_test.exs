@@ -44,13 +44,12 @@ defmodule Litmus.Type.ListTest do
 
   describe "minimum length validation" do
     test "returns :ok when field list length is more than or equal to min_length" do
-      min_length = 3
       data = %{"id" => [1, 2, 3]}
 
       schema = %{
         "id" => %Litmus.Type.List{
           required: true,
-          min_length: min_length
+          min_length: 3
         }
       }
 

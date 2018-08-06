@@ -23,7 +23,7 @@ defmodule Litmus.Type.List do
   @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
-         {:ok, data} <- check_if_list(type, field, data),
+         {:ok, data} <- validate_list(type, field, data),
          {:ok, data} <- type_validate(type, field, data),
          {:ok, data} <- min_length_validate(type, field, data),
          {:ok, data} <- max_length_validate(type, field, data),
@@ -34,8 +34,8 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec check_if_list(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
-  defp check_if_list(%__MODULE__{}, field, params) do
+  @spec validate_list(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  defp validate_list(%__MODULE__{}, field, params) do
     cond do
       !Map.has_key?(params, field) ->
         {:ok, params}
@@ -97,15 +97,15 @@ defmodule Litmus.Type.List do
 
   defp type_validate(%__MODULE__{type: type}, field, params) do
     case type do
-      :atom -> check_if_atom(params, field)
-      :boolean -> check_if_boolean(params, field)
-      :number -> check_if_number(params, field)
-      :string -> check_if_string(params, field)
+      :atom -> validate_atom(params, field)
+      :boolean -> validate_boolean(params, field)
+      :number -> validate_number(params, field)
+      :string -> validate_string(params, field)
     end
   end
 
-  @spec check_if_atom(map, String.t()) :: {:ok, map} | {:error, String.t()}
-  defp check_if_atom(params, field) do
+  @spec validate_atom(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  defp validate_atom(params, field) do
     if Enum.all?(params[field], &is_atom/1) do
       {:ok, params}
     else
@@ -113,8 +113,8 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec check_if_boolean(map, String.t()) :: {:ok, map} | {:error, String.t()}
-  defp check_if_boolean(params, field) do
+  @spec validate_boolean(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  defp validate_boolean(params, field) do
     if Enum.all?(params[field], &is_boolean/1) do
       {:ok, params}
     else
@@ -122,8 +122,8 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec check_if_number(map, String.t()) :: {:ok, map} | {:error, String.t()}
-  defp check_if_number(params, field) do
+  @spec validate_number(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  defp validate_number(params, field) do
     if Enum.all?(params[field], &is_number/1) do
       {:ok, params}
     else
@@ -131,8 +131,8 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec check_if_string(map, String.t()) :: {:ok, map} | {:error, String.t()}
-  defp check_if_string(params, field) do
+  @spec validate_string(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  defp validate_string(params, field) do
     if Enum.all?(params[field], &is_binary/1) do
       {:ok, params}
     else
