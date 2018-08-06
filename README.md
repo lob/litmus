@@ -38,11 +38,15 @@ iex> schema = %{
 ...> "new_user" => %Litmus.Type.Boolean{
 ...>   truthy: ["1"],
 ...>   falsy: ["0"]
+...>  },
+...> "account_ids" => %Litmus.Type.List{
+...>   max_length: 3,
+...>   type: :number
 ...>  }
 ...> }
-iex> params = %{"id" => 1, "username" => "user@123", "pin" => 1234, "new_user" => "1"}
+iex> params = %{"id" => 1, "username" => "user@123", "pin" => 1234, "new_user" => "1", "account_ids" => [1, 3, 9]}
 iex> Litmus.validate(params, schema)
-{:ok, %{"id" => 1, "new_user" => true, "pin" => 1234, "username" => "user@123"}}
+{:ok, %{"id" => 1, "new_user" => true, "pin" => 1234, "username" => "user@123", "account_ids" => [1, 3, 9]}}
 
 iex> schema = %{"id" => %Litmus.Type.Any{}}
 iex> params = %{"password" =>  1}
@@ -54,6 +58,7 @@ Currently, we support the following data types:
 
 * [**Any**](#module-litmus-type-any)
 * [**Boolean**](#module-litmus-type-boolean)
+* [**List**](#module-litmus-type-list)
 * [**Number**](#module-litmus-type-number)
 * [**String**](#module-litmus-type-string)
 
@@ -93,6 +98,33 @@ iex> Litmus.validate(params, schema)
 iex> params = %{"new_user" => 0}
 iex> Litmus.validate(params, schema)
 {:error, "new_user must be a boolean"}
+```
+
+### Litmus.Type.List
+
+The `List` module contains options that will validate List data types. It supports the following options:
+  * `:min_length` - Specifies the minimum list length. Allowed values are non-negative integers.
+  * `:max_length` - Specifies the maximum list length. Allowed values are non-negative integers.
+  * `:length` - Specifies the exact list length. Allowed values are non-negative integers.
+  * `:type` - Specifies the data type of elements in the list. Allowed values are are atoms `:atom, :boolean, :number and :string`. Default value is `nil`. If `nil`, any element type is allowed in the list.
+
+```
+iex> schema = %{
+...> "ids" => %Litmus.Type.List{
+...>   min_length: 1,
+...>   max_length: 5
+...> },
+...> "course_numbers" => %Litmus.Type.List{
+...>   length: 3,
+...>   type: :number
+...>  }
+...> }
+iex> params = %{"ids" => [1, "a"], "course_numbers" => [500, 523, 599]}
+iex> Litmus.validate(params, schema)
+{:ok, %{"ids" => [1, "a"], "course_numbers" => [500, 523, 599]}}
+iex> params = %{"ids" => [1, "a"], "course_numbers" => [500, "523", 599]}
+iex> Litmus.validate(params, schema)
+{:error, "course_numbers must be a list of numbers"}
 ```
 
 ### Litmus.Type.Number
