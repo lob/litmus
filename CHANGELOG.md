@@ -1,3 +1,9 @@
+### 0.3.0 (2018-08-21)
+
+##### New Features
+
+* **plug:**  Added a validation plug for use with Plug's Router ([#17](https://github.com/lob/litmus/pull/17))
+
 ### 0.2.0 (2018-08-06)
 
 ##### New Features
