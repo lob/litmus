@@ -10,7 +10,11 @@ defmodule Litmus.MixProject do
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      dialyzer: [plt_add_deps: :apps_direct, ignore_warnings: ".dialyzer_ignore"],
+      dialyzer: [
+        plt_add_deps: :apps_direct,
+        plt_add_apps: [:plug],
+        ignore_warnings: ".dialyzer_ignore"
+      ],
 
       # Docs
       name: "litmus",
@@ -53,6 +57,7 @@ defmodule Litmus.MixProject do
       {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
       {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.8", only: :test},
+      {:plug, "~> 1.5.0", optional: true},
       {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false}
     ]
   end

@@ -184,6 +184,50 @@ iex> Litmus.validate(params, schema)
 {:error, "password must be alphanumeric"}
 ```
 
+## Plug
+
+Litmus comes with a Plug for easy integration with Plug's built-in router. You can automatically validate query
+parameters and body parameters by passing the `litmus_query` and `litmus_body` private options to each route. When
+declaring the plug you must include a `on_error/2` function to be called when validation fails. It is recommended that
+you initialize this Plug between the `:match` and `:dispatch` plugs. If you want processing to stop on a validation
+error, be sure to halt the request with `Plug.Conn.halt/1`.
+
+#### Example
+
+```elixir
+defmodule MyRouter do
+  use Plug.Router
+
+  plug(Plug.Parsers, parsers: [:urlencoded, :multipart])
+
+  plug(:match)
+
+  plug(Litmus.Plug, on_error: &__MODULE__.on_error/2)
+
+  plug(:dispatch)
+
+  @schema %{
+    "id" => %Litmus.Type.Number{
+      required: true
+    }
+  }
+
+  get "/test", private: %{litmus_query: @schema} do
+    Plug.Conn.send_resp(conn, 200, "items")
+  end
+
+  post "/test", private: %{litmus_body: @schema} do
+    Plug.Conn.send_resp(conn, 200, "items")
+  end
+
+  def on_error(conn, error_message) do
+    conn
+    |> Plug.Conn.send_resp(400, error_message)
+    |> Plug.Conn.halt()
+  end
+end
+```
+
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/litmus](https://hexdocs.pm/litmus).
