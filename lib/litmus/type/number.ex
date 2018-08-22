@@ -1,5 +1,40 @@
 defmodule Litmus.Type.Number do
-  @moduledoc false
+  @moduledoc """
+  This type validates that values are numbers, and converts them to numbers if
+  possible. It converts "stringified" numerical values to numbers.
+
+  ## Options
+
+    * `:min` - Specifies the minimum value of the field.
+
+    * `:max` - Specifies the maximum value of the field.
+
+    * `:integer` - Specifies that the number must be an integer (no floating
+      point). Allowed values are `true` and `false`. The default is `false`.
+
+    * `:required` - Setting `:required` to `true` will cause a validation error
+      when a field is not present or the value is `nil`. Allowed values for
+      required are `true` and `false`. The default is `false`.
+
+  ## Examples
+
+      iex> schema = %{
+      ...> "id" => %Litmus.Type.Number{
+      ...>   integer: true
+      ...> },
+      ...> "gpa" => %Litmus.Type.Number{
+      ...>   min: 0,
+      ...>   max: 4
+      ...>  }
+      ...> }
+      iex> params = %{"id" => "123", "gpa" => 3.8}
+      iex> Litmus.validate(params, schema)
+      {:ok, %{"id" => 123, "gpa" => 3.8}}
+      iex> params = %{"id" => "123.456", "gpa" => 3.8}
+      iex> Litmus.validate(params, schema)
+      {:error, "id must be an integer"}
+
+  """
 
   defstruct [
     :min,
@@ -34,6 +69,9 @@ defmodule Litmus.Type.Number do
   defp convert(%__MODULE__{}, field, params) do
     cond do
       !Map.has_key?(params, field) ->
+        {:ok, params}
+
+      params[field] == nil ->
         {:ok, params}
 
       is_number(params[field]) ->

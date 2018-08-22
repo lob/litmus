@@ -1,5 +1,41 @@
 defmodule Litmus.Type.Boolean do
-  @moduledoc false
+  @moduledoc """
+  This type validates and converts values to booleans. It converts truthy and
+  falsy values to `true` or `false`.
+
+  ## Options
+
+    * `:required` - Setting `:required` to `true` will cause a validation error
+      when a field is not present or the value is `nil`. Allowed values for
+      required are `true` and `false`. The default is `false`.
+
+    * `:truthy` - Allows additional values, i.e. truthy values to be considered
+      valid booleans by converting them to `true` during validation. Allowed value
+      is an array of strings, numbers, or booleans. The default is `[true, "true"]`
+
+    * `:falsy` - Allows additional values, i.e. falsy values to be considered
+      valid booleans by converting them to `false` during validation. Allowed value
+      is an array of strings, number or boolean values. The default is `[false,
+      "false"]`
+
+  ## Examples
+
+      iex> schema = %{
+      ...> "new_user" => %Litmus.Type.Boolean{
+      ...>   truthy: ["1"],
+      ...>   falsy: ["0"]
+      ...>  }
+      ...> }
+      iex> params = %{"new_user" => "1"}
+      iex> Litmus.validate(params, schema)
+      {:ok, %{"new_user" => true}}
+
+      iex> schema = %{"new_user" => %Litmus.Type.Boolean{}}
+      iex> params = %{"new_user" => 0}
+      iex> Litmus.validate(params, schema)
+      {:error, "new_user must be a boolean"}
+
+  """
 
   alias Litmus.Required
 
@@ -50,6 +86,9 @@ defmodule Litmus.Type.Boolean do
   defp truthy_falsy_validate(%__MODULE__{falsy: falsy, truthy: truthy}, field, params) do
     cond do
       !Map.has_key?(params, field) ->
+        {:ok, params}
+
+      params[field] == nil ->
         {:ok, params}
 
       check_boolean_values(params[field], truthy, @truthy_default) ->

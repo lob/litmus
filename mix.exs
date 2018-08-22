@@ -22,7 +22,7 @@ defmodule Litmus.MixProject do
       source_url: @github_url,
       homepage_url: @github_url,
       docs: [
-        main: "Litmus",
+        main: "readme",
         extras: ["README.md"]
       ],
       package: [

@@ -1,10 +1,21 @@
 defmodule Litmus do
-  @moduledoc File.read!("#{__DIR__}/../README.md")
+  @moduledoc """
+  Litmus is a data validation library for Elixir.
+  """
 
   alias Litmus.Type
 
   @doc """
-  Validate data based on a schema.
+  Validates and converts data based on a schema.
+
+  ## Examples
+
+      iex> Litmus.validate(%{"id" => "123"}, %{"id" => %Litmus.Type.Number{}})
+      {:ok, %{"id" => 123}}
+
+      iex> Litmus.validate(%{"id" => "asdf"}, %{"id" => %Litmus.Type.Number{}})
+      {:error, "id must be a number"}
+
   """
   @spec validate(map, map) :: {:ok, map} | {:error, String.t()}
   def validate(data, schema) do

@@ -1,5 +1,55 @@
 defmodule Litmus.Type.String do
-  @moduledoc false
+  @moduledoc """
+  This type validates and converts values to strings It converts boolean and
+  number values to strings.
+
+  ## Options
+
+    * `:min_length` - Specifies the minimum number of characters allowed in the
+      string. Allowed values are non-negative integers.
+
+    * `:max_length` - Specifies the maximum number of characters allowed in the
+      string. Allowed values are non-negative integers.
+
+    * `:length` - Specifies the exact number of characters allowed in the
+      string. Allowed values are non-negative integers.
+
+    * `:regex` - Specifies a Regular expression that a string must match. Use
+      the `Litmus.Type.String.Regex` struct with the options:
+
+      * `:pattern` - The regex to match
+      * `:error_message` - An error message to use when the pattern does not match
+
+    * `:required` - Setting `:required` to `true` will cause a validation error
+      when a field is not present or the value is `nil`. Allowed values for
+      required are `true` and `false`. The default is `false`.
+
+    * `:trim` - Removes additional whitespace at the front and end of a string.
+      Allowed values are `true` and `false`. The default is `false`.
+
+  ## Examples
+
+      iex> schema = %{
+      ...> "username" => %Litmus.Type.String{
+      ...>   min_length: 3,
+      ...>   max_length: 10,
+      ...>   trim: true
+      ...> },
+      ...> "password" => %Litmus.Type.String{
+      ...>   length: 6,
+      ...>   regex: %Litmus.Type.String.Regex{
+      ...>     pattern: ~r/^[a-zA-Z0-9_]*$/,
+      ...>     error_message: "password must be alphanumeric"
+      ...>   }
+      ...>  }
+      ...> }
+      iex> params = %{"username" => " user123 ", "password" => "root01"}
+      iex> Litmus.validate(params, schema)
+      {:ok, %{"username" => "user123", "password" => "root01"}}
+      iex> Litmus.validate(%{"password" => "ro!_@1"}, schema)
+      {:error, "password must be alphanumeric"}
+
+  """
 
   alias Litmus.Required
   alias Litmus.Type
@@ -43,8 +93,8 @@ defmodule Litmus.Type.String do
       !Map.has_key?(params, field) ->
         {:ok, params}
 
-      is_nil(params[field]) ->
-        {:ok, Map.put(params, field, "")}
+      params[field] == nil ->
+        {:ok, params}
 
       is_binary(params[field]) ->
         {:ok, params}

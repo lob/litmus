@@ -1,5 +1,6 @@
 defmodule Litmus.Type.BooleanTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+  doctest Litmus.Type.Boolean
 
   alias Litmus.Type
 
@@ -11,6 +12,15 @@ defmodule Litmus.Type.BooleanTest do
       type = %Type.Boolean{
         required: true
       }
+
+      assert Type.Boolean.validate_field(type, field, data) == {:ok, data}
+    end
+
+    test "does not convert nil to a boolean" do
+      field = "id_given"
+      data = %{"id_given" => nil}
+
+      type = %Type.Boolean{}
 
       assert Type.Boolean.validate_field(type, field, data) == {:ok, data}
     end

@@ -1,5 +1,6 @@
 defmodule Litmus.Type.StringTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+  doctest Litmus.Type.String
 
   alias Litmus.Type
 
@@ -201,15 +202,14 @@ defmodule Litmus.Type.StringTest do
       assert Litmus.validate(data, schema) == {:ok, modified_data}
     end
 
-    test "returns :ok with parameter value converted to empty string if field is nil" do
+    test "does not convert nil to a string" do
       data = %{"id" => nil}
-      modified_data = %{"id" => ""}
 
       schema = %{
         "id" => %Litmus.Type.String{}
       }
 
-      assert Litmus.validate(data, schema) == {:ok, modified_data}
+      assert Litmus.validate(data, schema) == {:ok, data}
     end
 
     test "returns :error when field is neither string nor boolean nor number" do

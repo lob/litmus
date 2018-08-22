@@ -1,5 +1,6 @@
 defmodule Litmus.Type.AnyTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+  doctest Litmus.Type.Any
 
   alias Litmus.Type
 

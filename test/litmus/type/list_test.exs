@@ -1,5 +1,6 @@
 defmodule Litmus.Type.ListTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+  doctest Litmus.Type.List
 
   alias Litmus.Type
 
@@ -11,6 +12,15 @@ defmodule Litmus.Type.ListTest do
       type = %Type.List{
         required: true
       }
+
+      assert Type.List.validate_field(type, field, data) == {:ok, data}
+    end
+
+    test "does not convert nil to a list" do
+      field = "ids"
+      data = %{"ids" => nil}
+
+      type = %Type.List{}
 
       assert Type.List.validate_field(type, field, data) == {:ok, data}
     end
