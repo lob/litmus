@@ -16,6 +16,7 @@ defmodule Litmus.Plug do
     end
   end
 
+  @spec validate_query_params(Plug.Conn.t()) :: {:ok, Plug.Conn.t()} | {:error, String.t()}
   def validate_query_params(conn = %Plug.Conn{private: %{litmus_query: schema}}) do
     case Litmus.validate(conn.query_params, schema) do
       {:ok, new_params} -> {:ok, %Plug.Conn{conn | query_params: new_params}}
@@ -25,6 +26,7 @@ defmodule Litmus.Plug do
 
   def validate_query_params(conn), do: {:ok, conn}
 
+  @spec validate_body_params(Plug.Conn.t()) :: {:ok, Plug.Conn.t()} | {:error, String.t()}
   def validate_body_params(conn = %Plug.Conn{private: %{litmus_body: schema}}) do
     case Litmus.validate(conn.body_params, schema) do
       {:ok, new_params} -> {:ok, %Plug.Conn{conn | body_params: new_params}}
