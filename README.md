@@ -76,6 +76,7 @@ Litmus currently supports the following types.
 
 * `Litmus.Type.Any`
 * `Litmus.Type.Boolean`
+* `Litmus.Type.DateTime`
 * `Litmus.Type.List`
 * `Litmus.Type.Number`
 * `Litmus.Type.String`
