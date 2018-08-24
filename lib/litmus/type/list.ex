@@ -1,5 +1,41 @@
 defmodule Litmus.Type.List do
-  @moduledoc false
+  @moduledoc """
+  This type validates that a value is list.
+
+  ## Options
+
+    * `:min_length` - Specifies the minimum list length. Allowed values are
+      non-negative integers.
+
+    * `:max_length` - Specifies the maximum list length. Allowed values are
+      non-negative integers.
+
+    * `:length` - Specifies the exact list length. Allowed values are
+      non-negative integers.
+
+    * `:required` - Setting `:required` to `true` will cause a validation error
+      when a field is not present or the value is `nil`. Allowed values for
+      required are `true` and `false`. The default is `false`.
+
+    * `:type` - Specifies the data type of elements in the list. Allowed values
+      are are atoms `:atom, :boolean, :number and :string`. Default value is `nil`.
+      If `nil`, any element type is allowed in the list.
+
+  ## Examples
+
+      iex> schema = %{
+      ...>   "ids" => %Litmus.Type.List{
+      ...>     min_length: 1,
+      ...>     max_length: 5,
+      ...>     type: :number
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{"ids" => [1, 2]}, schema)
+      {:ok, %{"ids" => [1, 2]}}
+      iex> Litmus.validate(%{"ids" => [1, "a"]}, schema)
+      {:error, "ids must be a list of numbers"}
+
+  """
 
   alias Litmus.Required
   alias Litmus.Type
@@ -38,6 +74,9 @@ defmodule Litmus.Type.List do
   defp validate_list(%__MODULE__{}, field, params) do
     cond do
       !Map.has_key?(params, field) ->
+        {:ok, params}
+
+      params[field] == nil ->
         {:ok, params}
 
       is_list(params[field]) ->

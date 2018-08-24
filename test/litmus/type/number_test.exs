@@ -1,5 +1,6 @@
 defmodule Litmus.Type.NumberTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+  doctest Litmus.Type.Number
 
   alias Litmus.Type
 
@@ -41,6 +42,15 @@ defmodule Litmus.Type.NumberTest do
 
       assert Litmus.validate(invalid_number, schema) == {:error, "id must be a number"}
       assert Litmus.validate(boolean_data, schema) == {:error, "id must be a number"}
+    end
+
+    test "does not convert nil to a number" do
+      field = "id"
+      data = %{"id" => nil}
+
+      type = %Type.Number{}
+
+      assert Type.Number.validate_field(type, field, data) == {:ok, data}
     end
   end
 

@@ -1,5 +1,5 @@
 defmodule Litmus.RequiredTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Litmus.Required
   alias Litmus.Type
@@ -18,6 +18,17 @@ defmodule Litmus.RequiredTest do
     test "returns error when field is required and not present in params" do
       field = "id"
       params = %{}
+
+      type = %Type.Any{
+        required: true
+      }
+
+      assert Required.validate(type, field, params) == {:error, "#{field} is required"}
+    end
+
+    test "returns error when field is required and the value is nil params" do
+      field = "id"
+      params = %{"id" => nil}
 
       type = %Type.Any{
         required: true
