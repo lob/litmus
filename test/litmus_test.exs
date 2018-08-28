@@ -37,22 +37,28 @@ defmodule LitmusTest do
           type: :number,
           min_length: 2,
           max_length: 5
-        }
+        },
+        "start_date" => %Litmus.Type.DateTime{}
       }
 
-      req_params = %{
+      params = %{
         "id" => "abc",
         "password" => " 1234 ",
         "user" => "qwerty",
         "pin" => 3636,
         "remember_me" => 1,
-        "account_ids" => [523, 524, 599]
+        "account_ids" => [523, 524, 599],
+        "start_date" => "1990-05-01T06:32:00Z"
       }
 
-      modified_params = Map.replace!(req_params, "password", String.trim(req_params["password"]))
-      modified_params = Map.replace!(modified_params, "remember_me", true)
+      modified_params = %{
+        params
+        | "password" => String.trim(params["password"]),
+          "remember_me" => true,
+          "start_date" => params["start_date"] |> DateTime.from_iso8601() |> elem(1)
+      }
 
-      assert Litmus.validate(req_params, login_schema) == {:ok, modified_params}
+      assert Litmus.validate(params, login_schema) == {:ok, modified_params}
     end
 
     test "errors when a disallowed parameter is passed" do
@@ -62,12 +68,12 @@ defmodule LitmusTest do
         }
       }
 
-      req_params = %{
+      params = %{
         "id" => "1",
         "abc" => true
       }
 
-      assert Litmus.validate(req_params, login_schema) == {:error, "abc is not allowed"}
+      assert Litmus.validate(params, login_schema) == {:error, "abc is not allowed"}
     end
   end
 end
