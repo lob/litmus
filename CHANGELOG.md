@@ -1,3 +1,9 @@
+### 0.4.0 (2018-08-28)
+
+##### New Features
+
+* **datetime:**  Added DateTime type ([#20](https://github.com/lob/litmus/pull/20))
+
 ### 0.3.0 (2018-08-21)
 
 ##### New Features
