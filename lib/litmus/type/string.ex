@@ -108,17 +108,18 @@ defmodule Litmus.Type.String do
   end
 
   @spec min_length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
-  defp min_length_validate(%__MODULE__{min_length: nil}, _field, params) do
-    {:ok, params}
-  end
-
   defp min_length_validate(%__MODULE__{min_length: min_length}, field, params)
-       when is_integer(min_length) and min_length >= 0 do
-    if Map.has_key?(params, field) && String.length(params[field]) < min_length do
+       when is_integer(min_length) and min_length > 0 do
+    if Map.has_key?(params, field) &&
+         (params[field] == nil or String.length(params[field]) < min_length) do
       {:error, "#{field} length must be greater than or equal to #{min_length} characters"}
     else
       {:ok, params}
     end
+  end
+
+  defp min_length_validate(%__MODULE__{}, _field, params) do
+    {:ok, params}
   end
 
   @spec max_length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
@@ -128,7 +129,7 @@ defmodule Litmus.Type.String do
 
   defp max_length_validate(%__MODULE__{max_length: max_length}, field, params)
        when is_integer(max_length) and max_length >= 0 do
-    if Map.has_key?(params, field) && String.length(params[field]) > max_length do
+    if Map.get(params, field) && String.length(params[field]) > max_length do
       {:error, "#{field} length must be less than or equal to #{max_length} characters"}
     else
       {:ok, params}
@@ -140,10 +141,18 @@ defmodule Litmus.Type.String do
     {:ok, params}
   end
 
-  defp length_validate(%__MODULE__{length: length}, field, params)
-       when is_integer(length) and length >= 0 do
-    if Map.has_key?(params, field) && String.length(params[field]) != length do
-      {:error, "#{field} length must be #{length} characters"}
+  defp length_validate(%__MODULE__{length: 0}, field, params) do
+    if params[field] in [nil, ""] do
+      {:ok, params}
+    else
+      {:error, "#{field} length must be 0 characters"}
+    end
+  end
+
+  defp length_validate(%__MODULE__{length: len}, field, params) when is_integer(len) do
+    if Map.has_key?(params, field) &&
+         (params[field] == nil || String.length(params[field]) != len) do
+      {:error, "#{field} length must be #{len} characters"}
     else
       {:ok, params}
     end
@@ -155,7 +164,8 @@ defmodule Litmus.Type.String do
   end
 
   defp regex_validate(%__MODULE__{regex: regex}, field, params) do
-    if Map.has_key?(params, field) and !Regex.match?(regex.pattern, params[field]) do
+    if Map.has_key?(params, field) and
+         (params[field] == nil or !Regex.match?(regex.pattern, params[field])) do
       error_message = regex.error_message || "#{field} must be in a valid format"
       {:error, error_message}
     else
@@ -165,7 +175,7 @@ defmodule Litmus.Type.String do
 
   @spec trim(t, String.t(), map) :: {:ok, map}
   defp trim(%__MODULE__{trim: true}, field, params) do
-    if Map.has_key?(params, field) do
+    if Map.get(params, field) do
       trimmed_value = String.trim(params[field])
       trimmed_params = Map.put(params, field, trimmed_value)
       {:ok, trimmed_params}

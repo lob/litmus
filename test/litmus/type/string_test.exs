@@ -32,6 +32,30 @@ defmodule Litmus.Type.StringTest do
       assert Litmus.validate(data, schema) == {:ok, data}
     end
 
+    test "returns :ok when the value is nil and min_length is 0" do
+      data = %{"id" => nil}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          min_length: 0
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "returns :ok when the value is an empty string and min_length is 0" do
+      data = %{"id" => ""}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          min_length: 0
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
     test "errors when length of field is less than min_length" do
       min_length = 3
       field = "id"
@@ -40,6 +64,22 @@ defmodule Litmus.Type.StringTest do
       schema = %{
         "id" => %Litmus.Type.String{
           required: true,
+          min_length: min_length
+        }
+      }
+
+      assert Litmus.validate(data, schema) ==
+               {:error,
+                "#{field} length must be greater than or equal to #{min_length} characters"}
+    end
+
+    test "errors when value is nil and min_length is greater than 0" do
+      min_length = 3
+      field = "id"
+      data = %{"id" => nil}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
           min_length: min_length
         }
       }
@@ -59,6 +99,42 @@ defmodule Litmus.Type.StringTest do
         "id" => %Litmus.Type.String{
           required: true,
           max_length: max_length
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "returns :ok when the value is nil" do
+      data = %{"id" => nil}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          max_length: 10
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "returns :ok when the value is nil and the max length is 0" do
+      data = %{"id" => nil}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          max_length: 0
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "returns :ok when the value is an empty string and the max length is 0" do
+      data = %{"id" => ""}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          max_length: 0
         }
       }
 
@@ -97,6 +173,32 @@ defmodule Litmus.Type.StringTest do
       assert Litmus.validate(data, schema) == {:ok, data}
     end
 
+    test "returns :ok when the value is an empty string and the length is 0" do
+      length = 0
+      data = %{"id" => ""}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          length: length
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "returns :ok when the value is nil and the length is 0" do
+      length = 0
+      data = %{"id" => nil}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          length: length
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
     test "errors when length of field is not equal to length" do
       length = 3
       field = "id"
@@ -105,6 +207,36 @@ defmodule Litmus.Type.StringTest do
       schema = %{
         "id" => %Litmus.Type.String{
           required: true,
+          length: length
+        }
+      }
+
+      assert Litmus.validate(data, schema) ==
+               {:error, "#{field} length must be #{length} characters"}
+    end
+
+    test "errors when the value is nil and length is greater than 0" do
+      length = 3
+      field = "id"
+      data = %{"id" => nil}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          length: length
+        }
+      }
+
+      assert Litmus.validate(data, schema) ==
+               {:error, "#{field} length must be #{length} characters"}
+    end
+
+    test "errors when the length is 0 and the value is not empty or nil" do
+      length = 0
+      field = "id"
+      data = %{"id" => "a"}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
           length: length
         }
       }
@@ -159,6 +291,21 @@ defmodule Litmus.Type.StringTest do
 
       assert Litmus.validate(data, schema) == {:error, "#{field} must be in a valid format"}
     end
+
+    test "errors when the value is nil" do
+      data = %{"username" => nil}
+      field = "username"
+
+      schema = %{
+        field => %Litmus.Type.String{
+          regex: %Litmus.Type.String.Regex{
+            pattern: ~r/^\d{3,}(?:[-\s]?\d*)?$/
+          }
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:error, "#{field} must be in a valid format"}
+    end
   end
 
   describe "trim extra whitespaces" do
@@ -181,6 +328,18 @@ defmodule Litmus.Type.StringTest do
       schema = %{
         "id" => %Litmus.Type.String{
           trim: false
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "does not error when the value is nil" do
+      data = %{"id" => nil}
+
+      schema = %{
+        "id" => %Litmus.Type.String{
+          trim: true
         }
       }
 
