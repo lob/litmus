@@ -1,3 +1,9 @@
+### 0.5.0 (2019-01-02)
+
+##### New Features
+
+* **string:**  Allows nil strings when not required ([#21](https://github.com/lob/litmus/pull/21))
+
 ### 0.4.0 (2018-08-28)
 
 ##### New Features
