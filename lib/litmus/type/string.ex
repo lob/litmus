@@ -5,6 +5,10 @@ defmodule Litmus.Type.String do
 
   ## Options
 
+    * `:default` - Setting `:default` will populate a field with the provided
+      value, assuming that it is not present already. If a field already has a
+      value present, it will not be altered.
+
     * `:min_length` - Specifies the minimum number of characters allowed in the
       string. Allowed values are non-negative integers.
 
@@ -51,10 +55,11 @@ defmodule Litmus.Type.String do
 
   """
 
-  alias Litmus.Required
+  alias Litmus.{Default, Required}
   alias Litmus.Type
 
   defstruct [
+    :default,
     :min_length,
     :max_length,
     :length,
@@ -64,6 +69,7 @@ defmodule Litmus.Type.String do
   ]
 
   @type t :: %__MODULE__{
+          default: Litmus.Type.Any.Default.t() | nil,
           min_length: non_neg_integer | nil,
           max_length: non_neg_integer | nil,
           length: non_neg_integer | nil,
@@ -75,6 +81,7 @@ defmodule Litmus.Type.String do
   @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
+         {:ok, data} <- Default.validate(type, field, data),
          {:ok, data} <- convert(type, field, data),
          {:ok, data} <- trim(type, field, data),
          {:ok, data} <- min_length_validate(type, field, data),
