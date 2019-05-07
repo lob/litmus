@@ -59,17 +59,17 @@ defmodule Litmus.Type.String do
   alias Litmus.Type
 
   defstruct [
-    :default,
     :min_length,
     :max_length,
     :length,
+    default: Litmus.Type.Any.NoDefault,
     regex: %Type.String.Regex{},
     trim: false,
     required: false
   ]
 
   @type t :: %__MODULE__{
-          default: Litmus.Type.Any.Default.t() | nil,
+          default: any,
           min_length: non_neg_integer | nil,
           max_length: non_neg_integer | nil,
           length: non_neg_integer | nil,

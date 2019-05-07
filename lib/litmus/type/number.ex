@@ -41,15 +41,15 @@ defmodule Litmus.Type.Number do
   """
 
   defstruct [
-    :default,
     :min,
     :max,
+    default: Litmus.Type.Any.NoDefault,
     integer: false,
     required: false
   ]
 
   @type t :: %__MODULE__{
-          default: Litmus.Type.Any.Default.t() | nil,
+          default: any,
           min: number | nil,
           max: number | nil,
           integer: boolean,

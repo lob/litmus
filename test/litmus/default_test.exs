@@ -7,7 +7,7 @@ defmodule Litmus.DefaultTest do
   describe "validate/3" do
     test "returns params with default value populated if field not present" do
       type = %Type.Any{
-        default: %Type.Any.Default{value: "12345"}
+        default: "12345"
       }
 
       assert Default.validate(type, "id", %{}) == {:ok, %{"id" => "12345"}}
@@ -15,7 +15,7 @@ defmodule Litmus.DefaultTest do
 
     test "returns a default value of nil" do
       type = %Type.Any{
-        default: %Type.Any.Default{value: nil}
+        default: nil
       }
 
       assert Default.validate(type, "id", %{}) == {:ok, %{"id" => nil}}
@@ -25,7 +25,7 @@ defmodule Litmus.DefaultTest do
       params = %{"id" => "12345"}
 
       type = %Type.Any{
-        default: %Type.Any.Default{value: "67890"}
+        default: "67890"
       }
 
       assert Default.validate(type, "id", params) == {:ok, params}

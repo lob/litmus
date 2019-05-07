@@ -46,10 +46,13 @@ defmodule Litmus.Type.Boolean do
   @truthy_default [true, "true"]
   @falsy_default [false, "false"]
 
-  defstruct [:default, truthy: @truthy_default, falsy: @falsy_default, required: false]
+  defstruct default: Litmus.Type.Any.NoDefault,
+            truthy: @truthy_default,
+            falsy: @falsy_default,
+            required: false
 
   @type t :: %__MODULE__{
-          default: Litmus.Type.Any.Default.t() | nil,
+          default: any,
           truthy: [term],
           falsy: [term],
           required: boolean

@@ -30,10 +30,11 @@ defmodule Litmus.Type.Any do
 
   alias Litmus.{Default, Required}
 
-  defstruct [:default, required: false]
+  defstruct default: Litmus.Type.Any.NoDefault,
+            required: false
 
   @type t :: %__MODULE__{
-          default: Litmus.Type.Any.Default.t() | nil,
+          default: any,
           required: boolean
         }
 

@@ -40,7 +40,7 @@ defmodule LitmusTest do
         },
         "start_date" => %Litmus.Type.DateTime{},
         "email" => %Litmus.Type.String{
-          default: %Litmus.Type.Any.Default{value: ""}
+          default: ""
         }
       }
 

@@ -25,13 +25,11 @@ defmodule Litmus.Type.DateTime do
   alias Litmus.{Default, Required}
   alias Litmus.Type
 
-  defstruct [
-    :default,
-    required: false
-  ]
+  defstruct default: Litmus.Type.Any.NoDefault,
+            required: false
 
   @type t :: %__MODULE__{
-          default: Litmus.Type.Any.Default.t() | nil,
+          default: any,
           required: boolean
         }
 
