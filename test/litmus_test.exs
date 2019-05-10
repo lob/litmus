@@ -38,7 +38,10 @@ defmodule LitmusTest do
           min_length: 2,
           max_length: 5
         },
-        "start_date" => %Litmus.Type.DateTime{}
+        "start_date" => %Litmus.Type.DateTime{},
+        "email" => %Litmus.Type.String{
+          default: ""
+        }
       }
 
       params = %{
@@ -52,7 +55,7 @@ defmodule LitmusTest do
       }
 
       modified_params = %{
-        params
+        Map.put(params, "email", "")
         | "password" => String.trim(params["password"]),
           "remember_me" => true,
           "start_date" => params["start_date"] |> DateTime.from_iso8601() |> elem(1)

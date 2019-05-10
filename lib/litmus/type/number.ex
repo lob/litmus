@@ -5,6 +5,10 @@ defmodule Litmus.Type.Number do
 
   ## Options
 
+    * `:default` - Setting `:default` will populate a field with the provided
+      value, assuming that it is not present already. If a field already has a
+      value present, it will not be altered.
+
     * `:min` - Specifies the minimum value of the field.
 
     * `:max` - Specifies the maximum value of the field.
@@ -39,22 +43,25 @@ defmodule Litmus.Type.Number do
   defstruct [
     :min,
     :max,
+    default: Litmus.Type.Any.NoDefault,
     integer: false,
     required: false
   ]
 
   @type t :: %__MODULE__{
+          default: any,
           min: number | nil,
           max: number | nil,
           integer: boolean,
           required: boolean
         }
 
-  alias Litmus.Required
+  alias Litmus.{Default, Required}
 
   @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
+         {:ok, data} <- Default.validate(type, field, data),
          {:ok, data} <- convert(type, field, data),
          {:ok, data} <- min_validate(type, field, data),
          {:ok, data} <- max_validate(type, field, data),

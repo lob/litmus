@@ -5,6 +5,10 @@ defmodule Litmus.Type.Boolean do
 
   ## Options
 
+    * `:default` - Setting `:default` will populate a field with the provided
+      value, assuming that it is not present already. If a field already has a
+      value present, it will not be altered.
+
     * `:required` - Setting `:required` to `true` will cause a validation error
       when a field is not present or the value is `nil`. Allowed values for
       required are `true` and `false`. The default is `false`.
@@ -37,16 +41,18 @@ defmodule Litmus.Type.Boolean do
 
   """
 
-  alias Litmus.Required
+  alias Litmus.{Default, Required}
 
   @truthy_default [true, "true"]
   @falsy_default [false, "false"]
 
-  defstruct truthy: @truthy_default,
+  defstruct default: Litmus.Type.Any.NoDefault,
+            truthy: @truthy_default,
             falsy: @falsy_default,
             required: false
 
   @type t :: %__MODULE__{
+          default: any,
           truthy: [term],
           falsy: [term],
           required: boolean
@@ -55,6 +61,7 @@ defmodule Litmus.Type.Boolean do
   @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
+         {:ok, data} <- Default.validate(type, field, data),
          {:ok, data} <- truthy_falsy_validate(type, field, data) do
       {:ok, data}
     else
