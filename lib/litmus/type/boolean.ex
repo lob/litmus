@@ -25,14 +25,22 @@ defmodule Litmus.Type.Boolean do
   ## Examples
 
       iex> schema = %{
-      ...> "new_user" => %Litmus.Type.Boolean{
-      ...>   truthy: ["1"],
-      ...>   falsy: ["0"]
-      ...>  }
+      ...>   "new_user" => %Litmus.Type.Boolean{
+      ...>     truthy: ["1"],
+      ...>     falsy: ["0"]
+      ...>   }
       ...> }
       iex> params = %{"new_user" => "1"}
       iex> Litmus.validate(params, schema)
       {:ok, %{"new_user" => true}}
+
+      iex> schema = %{
+      ...>   "new_user" => %Litmus.Type.Boolean{
+      ...>     default: false
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{}, schema)
+      {:ok, %{"new_user" => false}}
 
       iex> schema = %{"new_user" => %Litmus.Type.Boolean{}}
       iex> params = %{"new_user" => 0}

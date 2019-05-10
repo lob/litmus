@@ -1,13 +1,15 @@
 defmodule Litmus.Type.DateTime do
   @moduledoc """
-  This type validates and converts ISO-8601 datetime with timezone strings into
-  `DateTime`s.
+  This type validates DateTimes. It accepts either `DateTime` structs or
+  ISO-8601 strings. ISO-8601 datetime with timezone strings will be converted
+  into `DateTime`s.
 
   ## Options
 
     * `:default` - Setting `:default` will populate a field with the provided
       value, assuming that it is not present already. If a field already has a
-      value present, it will not be altered.
+      value present, it will not be altered. The default can either be a `DateTime`
+      or an ISO-8601 string.
 
     * `:required` - Setting `:required` to `true` will cause a validation error
       when a field is not present or the value is `nil`. Allowed values for
@@ -19,6 +21,25 @@ defmodule Litmus.Type.DateTime do
       iex> {:ok, %{"start_date" => datetime}} = Litmus.validate(%{"start_date" => "2017-06-18T05:45:33Z"}, schema)
       iex> datetime
       #DateTime<2017-06-18 05:45:33Z>
+
+      iex> schema = %{
+      ...>   "start_date" => %Litmus.Type.DateTime{
+      ...>     default: "2019-05-01T06:25:00-0700"
+      ...>   }
+      ...> }
+      iex> {:ok, %{"start_date" => datetime}} = Litmus.validate(%{}, schema)
+      iex> datetime
+      #DateTime<2019-05-01 13:25:00Z>
+
+      iex> {:ok, default_datetime, _} = DateTime.from_iso8601("2019-05-01T06:25:00-0700")
+      ...> schema = %{
+      ...>   "start_date" => %Litmus.Type.DateTime{
+      ...>     default: default_datetime
+      ...>   }
+      ...> }
+      iex> {:ok, %{"start_date" => datetime}} = Litmus.validate(%{}, schema)
+      iex> datetime
+      #DateTime<2019-05-01 13:25:00Z>
 
   """
 
@@ -59,10 +80,17 @@ defmodule Litmus.Type.DateTime do
           {:error, _} -> error_tuple(field)
         end
 
+      datetime?(params[field]) ->
+        {:ok, params}
+
       true ->
         error_tuple(field)
     end
   end
+
+  @spec datetime?(term) :: boolean
+  defp datetime?(%DateTime{}), do: true
+  defp datetime?(_), do: false
 
   @spec error_tuple(String.t()) :: {:error, String.t()}
   defp error_tuple(field) do

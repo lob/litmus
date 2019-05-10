@@ -39,6 +39,14 @@ defmodule Litmus.Type.List do
       iex> Litmus.validate(%{"ids" => [1, "a"]}, schema)
       {:error, "ids must be a list of numbers"}
 
+      iex> schema = %{
+      ...>   "ids" => %Litmus.Type.List{
+      ...>     default: []
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{}, schema)
+      {:ok, %{"ids" => []}}
+
   """
 
   alias Litmus.{Default, Required}
