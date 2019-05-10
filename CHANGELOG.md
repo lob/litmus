@@ -1,3 +1,9 @@
+### 0.6.0 (2019-05-10)
+
+##### New Features
+
+* **default:**  Adds default option to all types ([#22](https://github.com/lob/litmus/pull/22))
+
 ### 0.5.0 (2019-01-02)
 
 ##### New Features
