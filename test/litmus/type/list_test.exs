@@ -31,7 +31,8 @@ defmodule Litmus.Type.ListTest do
 
       type = %Type.List{
         length: 3,
-        type: :boolean
+        type: :boolean,
+        unique: true
       }
 
       assert Type.List.validate_field(type, field, data) == {:ok, data}
@@ -205,6 +206,44 @@ defmodule Litmus.Type.ListTest do
       assert Litmus.validate(data, schema_boolean) == {:error, "id must be a list of boolean"}
       assert Litmus.validate(data, schema_number) == {:error, "id must be a list of numbers"}
       assert Litmus.validate(data, schema_string) == {:error, "id must be a list of strings"}
+    end
+  end
+
+  describe "uniqueness validation" do
+    test "returns :ok when values are unique" do
+      data = %{"id" => [1, 2, 3]}
+
+      schema = %{
+        "id" => %Litmus.Type.List{
+          unique: true
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "errors when values are not unique" do
+      data = %{"id" => [1, 2, 3, 2]}
+
+      schema = %{
+        "id" => %Litmus.Type.List{
+          unique: true
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:error, "id cannot contain duplicate values"}
+    end
+
+    test "returns :ok when disabled" do
+      data = %{"id" => [1, 2, 3, 1]}
+
+      schema = %{
+        "id" => %Litmus.Type.List{
+          unique: false
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
     end
   end
 end
