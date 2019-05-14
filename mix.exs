@@ -7,7 +7,7 @@ defmodule Litmus.MixProject do
     [
       app: :litmus,
       version: "0.6.0",
-      elixir: "~> 1.6",
+      elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: [
@@ -54,10 +54,10 @@ defmodule Litmus.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
-      {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.8", only: :test},
-      {:plug, "~> 1.5.0", optional: true},
+      {:ex_doc, "~> 0.20.2", only: :dev, runtime: false},
+      {:credo, "~> 1.0.5", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.11", only: :test},
+      {:plug, "~> 1.8.0", optional: true},
       {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false}
     ]
   end
