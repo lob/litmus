@@ -28,6 +28,17 @@ defmodule Litmus.Type.DateTimeTest do
       assert Type.DateTime.validate_field(type, @field, data) == {:ok, data}
     end
 
+    test "allows DateTimes" do
+      {:ok, datetime, _} = DateTime.from_iso8601("1999-01-05T05:00:00Z")
+      data = %{@field => datetime}
+
+      type = %Type.DateTime{
+        required: true
+      }
+
+      assert Type.DateTime.validate_field(type, @field, data) == {:ok, data}
+    end
+
     test "errors when required datetime is not provided" do
       data = %{}
 

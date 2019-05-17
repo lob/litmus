@@ -52,6 +52,9 @@ schema = %{
   "account_ids" => %Litmus.Type.List{
     max_length: 3,
     type: :number
+  },
+  "remember_me" => %Litmus.Type.Boolean{
+    default: false
   }
 }
 
@@ -64,7 +67,16 @@ params = %{
 }
 
 Litmus.validate(params, schema)
-# => {:ok, %{"id" => 1, "new_user" => true, "pin" => 1234, "username" => "user@123", "account_ids" => [1, 3, 9]}}
+# => {:ok,
+#      %{
+#        "id" => 1,
+#        "new_user" => true,
+#        "pin" => 1234,
+#        "username" => "user@123",
+#        "account_ids" => [1, 3, 9],
+#        "remember_me" => false
+#      }
+#    }
 
 Litmus.validate(%{}, schema)
 # => {:error, "id is required"}

@@ -23,13 +23,13 @@ defmodule Litmus.Type.Number do
   ## Examples
 
       iex> schema = %{
-      ...> "id" => %Litmus.Type.Number{
-      ...>   integer: true
-      ...> },
-      ...> "gpa" => %Litmus.Type.Number{
-      ...>   min: 0,
-      ...>   max: 4
-      ...>  }
+      ...>   "id" => %Litmus.Type.Number{
+      ...>     integer: true
+      ...>   },
+      ...>   "gpa" => %Litmus.Type.Number{
+      ...>     min: 0,
+      ...>     max: 4
+      ...>   }
       ...> }
       iex> params = %{"id" => "123", "gpa" => 3.8}
       iex> Litmus.validate(params, schema)
@@ -37,6 +37,14 @@ defmodule Litmus.Type.Number do
       iex> params = %{"id" => "123.456", "gpa" => 3.8}
       iex> Litmus.validate(params, schema)
       {:error, "id must be an integer"}
+
+      iex> schema = %{
+      ...>   "gpa" => %Litmus.Type.Number{
+      ...>     default: 4
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{}, schema)
+      {:ok, %{"gpa" => 4}}
 
   """
 

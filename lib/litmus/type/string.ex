@@ -34,24 +34,32 @@ defmodule Litmus.Type.String do
   ## Examples
 
       iex> schema = %{
-      ...> "username" => %Litmus.Type.String{
-      ...>   min_length: 3,
-      ...>   max_length: 10,
-      ...>   trim: true
-      ...> },
-      ...> "password" => %Litmus.Type.String{
-      ...>   length: 6,
-      ...>   regex: %Litmus.Type.String.Regex{
-      ...>     pattern: ~r/^[a-zA-Z0-9_]*$/,
-      ...>     error_message: "password must be alphanumeric"
+      ...>   "username" => %Litmus.Type.String{
+      ...>     min_length: 3,
+      ...>     max_length: 10,
+      ...>     trim: true
+      ...>   },
+      ...>   "password" => %Litmus.Type.String{
+      ...>     length: 6,
+      ...>     regex: %Litmus.Type.String.Regex{
+      ...>       pattern: ~r/^[a-zA-Z0-9_]*$/,
+      ...>       error_message: "password must be alphanumeric"
+      ...>     }
       ...>   }
-      ...>  }
       ...> }
       iex> params = %{"username" => " user123 ", "password" => "root01"}
       iex> Litmus.validate(params, schema)
       {:ok, %{"username" => "user123", "password" => "root01"}}
       iex> Litmus.validate(%{"password" => "ro!_@1"}, schema)
       {:error, "password must be alphanumeric"}
+
+      iex> schema = %{
+      ...>   "username" => %Litmus.Type.String{
+      ...>     default: "anonymous"
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{}, schema)
+      {:ok, %{"username" => "anonymous"}}
 
   """
 

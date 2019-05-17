@@ -18,6 +18,10 @@ defmodule Litmus.Type.Any do
       iex> Litmus.validate(%{"id" => 1}, schema)
       {:ok, %{"id" => 1}}
 
+      iex> schema = %{"id" => %Litmus.Type.Any{default: "new_id"}}
+      iex> Litmus.validate(%{}, schema)
+      {:ok, %{"id" => "new_id"}}
+
       iex> schema = %{"id" => %Litmus.Type.Any{required: true}}
       iex> Litmus.validate(%{}, schema)
       {:error, "id is required"}
