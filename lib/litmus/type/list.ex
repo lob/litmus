@@ -204,12 +204,21 @@ defmodule Litmus.Type.List do
 
   defp unique_validate(%__MODULE__{unique: true}, field, params) do
     list = params[field]
-    unique_list = Enum.uniq(list)
 
-    if length(unique_list) != length(list) do
-      {:error, "#{field} cannot contain duplicate values"}
-    else
+    if uniq?(list, %{}) do
       {:ok, params}
+    else
+      {:error, "#{field} cannot contain duplicate values"}
+    end
+  end
+
+  @spec uniq?([term], map) :: boolean
+  defp uniq?([], _set), do: true
+
+  defp uniq?([head | tail], set) do
+    case set do
+      %{^head => true} -> false
+      %{} -> uniq?(tail, Map.put(set, head, true))
     end
   end
 
