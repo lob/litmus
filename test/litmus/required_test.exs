@@ -45,7 +45,7 @@ defmodule Litmus.RequiredTest do
         required: false
       }
 
-      assert Required.validate(type, field, params) == {:ok, params}
+      assert Required.validate(type, field, params) == {:ok_not_present, params}
     end
   end
 end

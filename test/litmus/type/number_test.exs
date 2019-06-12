@@ -15,6 +15,17 @@ defmodule Litmus.Type.NumberTest do
 
       assert Type.Number.validate_field(type, field, data) == {:ok, data}
     end
+
+    test "does not error if the field is not provided and not required" do
+      field = "id"
+      data = %{}
+
+      type = %Type.Number{
+        min: 3
+      }
+
+      assert Type.Number.validate_field(type, field, data) == {:ok, data}
+    end
   end
 
   describe "convert string to number" do

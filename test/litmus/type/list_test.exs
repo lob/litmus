@@ -24,6 +24,18 @@ defmodule Litmus.Type.ListTest do
 
       assert Type.List.validate_field(type, field, data) == {:ok, data}
     end
+
+    test "does not error if the field is not provided and not required" do
+      field = "ids"
+      data = %{}
+
+      type = %Type.List{
+        length: 3,
+        type: :boolean
+      }
+
+      assert Type.List.validate_field(type, field, data) == {:ok, data}
+    end
   end
 
   describe "check if field is list" do

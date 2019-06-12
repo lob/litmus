@@ -71,5 +71,14 @@ defmodule Litmus.Type.DateTimeTest do
       assert Type.DateTime.validate_field(type, @field, data) ==
                {:error, "start_date must be a valid ISO-8601 datetime"}
     end
+
+    test "does not error if the field is not provided and not required" do
+      field = "id"
+      data = %{}
+
+      type = %Type.DateTime{}
+
+      assert Type.DateTime.validate_field(type, field, data) == {:ok, data}
+    end
   end
 end
