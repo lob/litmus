@@ -42,7 +42,7 @@ defmodule Litmus.Type.Any do
           required: boolean
         }
 
-  @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec validate_field(t, term, map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     case Required.validate(type, field, data) do
       {:ok, data} -> {:ok, data}
@@ -54,7 +54,7 @@ defmodule Litmus.Type.Any do
   defimpl Litmus.Type do
     alias Litmus.Type
 
-    @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
+    @spec validate(Type.t(), term, map) :: {:ok, map} | {:error, String.t()}
     def validate(type, field, data), do: Type.Any.validate_field(type, field, data)
   end
 end

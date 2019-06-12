@@ -66,7 +66,7 @@ defmodule Litmus.Type.Number do
 
   alias Litmus.{Default, Required}
 
-  @spec validate_field(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec validate_field(t, term, map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
          {:ok, data} <- convert(type, field, data),
@@ -80,7 +80,7 @@ defmodule Litmus.Type.Number do
     end
   end
 
-  @spec convert(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec convert(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp convert(%__MODULE__{}, field, params) do
     cond do
       params[field] == nil ->
@@ -125,7 +125,7 @@ defmodule Litmus.Type.Number do
     end
   end
 
-  @spec integer_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec integer_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp integer_validate(%__MODULE__{integer: false}, _field, params) do
     {:ok, params}
   end
@@ -138,7 +138,7 @@ defmodule Litmus.Type.Number do
     end
   end
 
-  @spec min_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec min_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp min_validate(%__MODULE__{min: nil}, _field, params) do
     {:ok, params}
   end
@@ -152,7 +152,7 @@ defmodule Litmus.Type.Number do
     end
   end
 
-  @spec max_validate(t, binary, map) :: {:ok, map} | {:error, binary}
+  @spec max_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp max_validate(%__MODULE__{max: nil}, _field, params) do
     {:ok, params}
   end
@@ -169,7 +169,7 @@ defmodule Litmus.Type.Number do
   defimpl Litmus.Type do
     alias Litmus.Type
 
-    @spec validate(Type.t(), binary, map) :: {:ok, map} | {:error, binary}
+    @spec validate(Type.t(), term, map) :: {:ok, map} | {:error, String.t()}
     def validate(type, field, data), do: Type.Number.validate_field(type, field, data)
   end
 end

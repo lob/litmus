@@ -66,11 +66,11 @@ defmodule Litmus.Type.List do
           min_length: non_neg_integer | nil,
           max_length: non_neg_integer | nil,
           length: non_neg_integer | nil,
-          type: String.t() | atom | nil,
+          type: atom | nil,
           required: boolean
         }
 
-  @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec validate_field(t, term, map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
          {:ok, data} <- validate_list(type, field, data),
@@ -85,7 +85,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec validate_list(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec validate_list(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp validate_list(%__MODULE__{}, field, params) do
     cond do
       params[field] == nil ->
@@ -99,7 +99,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec min_length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec min_length_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp min_length_validate(%__MODULE__{min_length: nil}, _field, params) do
     {:ok, params}
   end
@@ -113,7 +113,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec max_length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec max_length_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp max_length_validate(%__MODULE__{max_length: nil}, _field, params) do
     {:ok, params}
   end
@@ -127,7 +127,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec length_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec length_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp length_validate(%__MODULE__{length: nil}, _field, params) do
     {:ok, params}
   end
@@ -141,7 +141,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec type_validate(t, String.t() | atom, map) :: {:ok, map} | {:error, String.t()}
+  @spec type_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp type_validate(%__MODULE__{type: nil}, _field, params) do
     {:ok, params}
   end
@@ -155,7 +155,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec validate_atom(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  @spec validate_atom(map, term) :: {:ok, map} | {:error, String.t()}
   defp validate_atom(params, field) do
     if Enum.all?(params[field], &is_atom/1) do
       {:ok, params}
@@ -164,7 +164,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec validate_boolean(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  @spec validate_boolean(map, term) :: {:ok, map} | {:error, String.t()}
   defp validate_boolean(params, field) do
     if Enum.all?(params[field], &is_boolean/1) do
       {:ok, params}
@@ -173,7 +173,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec validate_number(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  @spec validate_number(map, term) :: {:ok, map} | {:error, String.t()}
   defp validate_number(params, field) do
     if Enum.all?(params[field], &is_number/1) do
       {:ok, params}
@@ -182,7 +182,7 @@ defmodule Litmus.Type.List do
     end
   end
 
-  @spec validate_string(map, String.t()) :: {:ok, map} | {:error, String.t()}
+  @spec validate_string(map, term) :: {:ok, map} | {:error, String.t()}
   defp validate_string(params, field) do
     if Enum.all?(params[field], &is_binary/1) do
       {:ok, params}
@@ -194,7 +194,7 @@ defmodule Litmus.Type.List do
   defimpl Litmus.Type do
     alias Litmus.Type
 
-    @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
+    @spec validate(Type.t(), term, map) :: {:ok, map} | {:error, String.t()}
     def validate(type, field, data), do: Type.List.validate_field(type, field, data)
   end
 end
