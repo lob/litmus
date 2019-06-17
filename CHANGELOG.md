@@ -1,3 +1,17 @@
+### 1.0.0 (2019-06-17)
+
+##### New Features
+
+* **string:**  Adds :replace option ([#26](https://github.com/lob/litmus/pull/26))
+* **list:**  Adds :unique option ([#25](https://github.com/lob/litmus/pull/25))
+* **datetime:**  Allows DateTime structs as values and default values ([#24](https://github.com/lob/litmus/pull/24))
+
+##### Internal Changes
+
+* **typespecs:** Corrects typespecs ([#29](https://github.com/lob/litmus/pull/29))
+* **required:** Exit early for non-required, non-present field ([#28](https://github.com/lob/litmus/pull/28))
+* **dependencies:** Support for Elixir 1.8 and upgraded dependencies ([#23](https://github.com/lob/litmus/pull/23))
+
 ### 0.6.0 (2019-05-10)
 
 ##### New Features
