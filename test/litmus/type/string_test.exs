@@ -358,6 +358,73 @@ defmodule Litmus.Type.StringTest do
     end
   end
 
+  describe "replace" do
+    test "replaces a pattern in a string with a new string" do
+      data = %{"username" => "user123"}
+      modified_data = %{"username" => "anonymous"}
+
+      schema = %{
+        "username" => %Litmus.Type.String{
+          replace: %Litmus.Type.String.Replace{
+            pattern: ~r/^user[0-9]*$/,
+            replacement: "anonymous"
+          }
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, modified_data}
+    end
+
+    test "replaces multiple occurences of a regex within a string" do
+      data = %{"username" => "user123"}
+      modified_data = %{"username" => "userXXX"}
+
+      schema = %{
+        "username" => %Litmus.Type.String{
+          replace: %Litmus.Type.String.Replace{
+            pattern: ~r/[0-9]/,
+            replacement: "X"
+          }
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, modified_data}
+    end
+
+    test "replaces multiple occurences of a string within a string" do
+      data = %{"username" => "user212"}
+      modified_data = %{"username" => "userX1X"}
+
+      schema = %{
+        "username" => %Litmus.Type.String{
+          replace: %Litmus.Type.String.Replace{
+            pattern: "2",
+            replacement: "X"
+          }
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, modified_data}
+    end
+
+    test "replaces a single occurences of a patten when global is false" do
+      data = %{"username" => "user123"}
+      modified_data = %{"username" => "userX23"}
+
+      schema = %{
+        "username" => %Litmus.Type.String{
+          replace: %Litmus.Type.String.Replace{
+            pattern: ~r/[0-9]/,
+            replacement: "X",
+            global: false
+          }
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, modified_data}
+    end
+  end
+
   describe "convert to string" do
     test "returns :ok with new parameters having values converted to string when field is boolean or number" do
       data = %{"id" => 1, "new_user" => true}

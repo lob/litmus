@@ -21,8 +21,16 @@ defmodule Litmus.Type.String do
     * `:regex` - Specifies a Regular expression that a string must match. Use
       the `Litmus.Type.String.Regex` struct with the options:
 
-      * `:pattern` - The regex to match
+      * `:pattern` - A `Regex.t()` to match
       * `:error_message` - An error message to use when the pattern does not match
+
+    * `:replace` - Replaces occurences of a pattern with a string. Use the
+      `Litmus.Type.String.Replace` struct with the options:
+
+      * `:pattern` - A `Regex.t()`, `String.t()`, or compiled pattern to match
+      * `:replacement` - A `String.t()` to replace
+      * `:global` - When `true`, all occurences of the pattern are replaced.
+        When `false`, only the first occurence is replaced. Defaults to `true`.
 
     * `:required` - Setting `:required` to `true` will cause a validation error
       when a field is not present or the value is `nil`. Allowed values for
@@ -55,6 +63,17 @@ defmodule Litmus.Type.String do
 
       iex> schema = %{
       ...>   "username" => %Litmus.Type.String{
+      ...>     replace: %Litmus.Type.String.Replace{
+      ...>       pattern: ~r/\_/,
+      ...>       replacement: ""
+      ...>     }
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{"username" => "one_two_three"}, schema)
+      {:ok, %{"username" => "onetwothree"}}
+
+      iex> schema = %{
+      ...>   "username" => %Litmus.Type.String{
       ...>     default: "anonymous"
       ...>   }
       ...> }
@@ -72,6 +91,7 @@ defmodule Litmus.Type.String do
     :length,
     default: Litmus.Type.Any.NoDefault,
     regex: %Type.String.Regex{},
+    replace: %Type.String.Replace{},
     trim: false,
     required: false
   ]
@@ -82,6 +102,7 @@ defmodule Litmus.Type.String do
           max_length: non_neg_integer | nil,
           length: non_neg_integer | nil,
           regex: Type.String.Regex.t(),
+          replace: Type.String.Replace.t(),
           trim: boolean,
           required: boolean
         }
@@ -94,7 +115,8 @@ defmodule Litmus.Type.String do
          {:ok, data} <- min_length_validate(type, field, data),
          {:ok, data} <- max_length_validate(type, field, data),
          {:ok, data} <- length_validate(type, field, data),
-         {:ok, data} <- regex_validate(type, field, data) do
+         {:ok, data} <- regex_validate(type, field, data),
+         {:ok, data} <- replace(type, field, data) do
       {:ok, data}
     else
       {:ok_not_present, data} -> Default.validate(type, field, data)
@@ -168,8 +190,20 @@ defmodule Litmus.Type.String do
     end
   end
 
+  @spec replace(t, term, map) :: {:ok, map}
+  defp replace(%__MODULE__{replace: %__MODULE__.Replace{pattern: nil}}, _field, params) do
+    {:ok, params}
+  end
+
+  defp replace(%__MODULE__{replace: replace}, field, params) do
+    new_string =
+      String.replace(params[field], replace.pattern, replace.replacement, global: replace.global)
+
+    {:ok, Map.put(params, field, new_string)}
+  end
+
   @spec regex_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
-  defp regex_validate(%__MODULE__{regex: %{pattern: nil}}, _field, params) do
+  defp regex_validate(%__MODULE__{regex: %__MODULE__.Regex{pattern: nil}}, _field, params) do
     {:ok, params}
   end
 
