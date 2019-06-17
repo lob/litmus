@@ -44,7 +44,7 @@ defmodule Litmus.Type.DateTime do
           required: boolean
         }
 
-  @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec validate_field(t, term, map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
          {:ok, data} <- convert(type, field, data) do
@@ -55,7 +55,7 @@ defmodule Litmus.Type.DateTime do
     end
   end
 
-  @spec convert(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec convert(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp convert(%__MODULE__{}, field, params) do
     cond do
       params[field] == nil ->
@@ -87,7 +87,7 @@ defmodule Litmus.Type.DateTime do
   defimpl Litmus.Type do
     alias Litmus.Type
 
-    @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
+    @spec validate(Type.t(), term, map) :: {:ok, map} | {:error, String.t()}
     def validate(type, field, data), do: Type.DateTime.validate_field(type, field, data)
   end
 end

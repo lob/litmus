@@ -3,7 +3,7 @@ defmodule Litmus.Default do
 
   alias Litmus.Type.Any.NoDefault
 
-  @spec validate(map, String.t(), map) :: {:ok, map}
+  @spec validate(map, term, map) :: {:ok, map}
   def validate(%{default: default_value}, field, params) when default_value != NoDefault do
     {:ok, Map.put_new(params, field, default_value)}
   end

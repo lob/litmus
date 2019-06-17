@@ -66,7 +66,7 @@ defmodule Litmus.Type.Boolean do
           required: boolean
         }
 
-  @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec validate_field(t, term, map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
          {:ok, data} <- truthy_falsy_validate(type, field, data) do
@@ -97,7 +97,7 @@ defmodule Litmus.Type.Boolean do
     initial_value in Enum.uniq(additional_values ++ default_values)
   end
 
-  @spec truthy_falsy_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec truthy_falsy_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
   defp truthy_falsy_validate(%__MODULE__{falsy: falsy, truthy: truthy}, field, params) do
     cond do
       params[field] == nil ->
@@ -117,7 +117,7 @@ defmodule Litmus.Type.Boolean do
   defimpl Litmus.Type do
     alias Litmus.Type
 
-    @spec validate(Type.t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
+    @spec validate(Type.t(), term, map) :: {:ok, map} | {:error, String.t()}
     def validate(type, field, data), do: Type.Boolean.validate_field(type, field, data)
   end
 end

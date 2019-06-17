@@ -11,6 +11,6 @@ defprotocol Litmus.Type do
           | Type.Number.t()
           | Type.String.t()
 
-  @spec validate(t(), String.t(), map) :: {:ok, map} | {:error, String.t()}
+  @spec validate(t(), term, map) :: {:ok, map} | {:error, String.t()}
   def validate(type, field, data)
 end
