@@ -1,6 +1,6 @@
 # Litmus
 
-![Hex.pm](https://img.shields.io/hexpm/v/litmus.svg)
+[![Hex.pm](https://img.shields.io/hexpm/v/litmus.svg)](https://hex.pm/packages/litmus)
 [![Build Docs](https://img.shields.io/badge/hexdocs-release-blue.svg)](https://hexdocs.pm/litmus/Litmus.html)
 [![Build Status](https://travis-ci.org/lob/litmus.svg?branch=master)](https://travis-ci.org/lob/litmus)
 
