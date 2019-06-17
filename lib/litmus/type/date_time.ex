@@ -8,8 +8,7 @@ defmodule Litmus.Type.DateTime do
 
     * `:default` - Setting `:default` will populate a field with the provided
       value, assuming that it is not present already. If a field already has a
-      value present, it will not be altered. The default can either be a `DateTime`
-      or an ISO-8601 string.
+      value present, it will not be altered.
 
     * `:required` - Setting `:required` to `true` will cause a validation error
       when a field is not present or the value is `nil`. Allowed values for
@@ -21,15 +20,6 @@ defmodule Litmus.Type.DateTime do
       iex> {:ok, %{"start_date" => datetime}} = Litmus.validate(%{"start_date" => "2017-06-18T05:45:33Z"}, schema)
       iex> datetime
       #DateTime<2017-06-18 05:45:33Z>
-
-      iex> schema = %{
-      ...>   "start_date" => %Litmus.Type.DateTime{
-      ...>     default: "2019-05-01T06:25:00-0700"
-      ...>   }
-      ...> }
-      iex> {:ok, %{"start_date" => datetime}} = Litmus.validate(%{}, schema)
-      iex> datetime
-      #DateTime<2019-05-01 13:25:00Z>
 
       iex> {:ok, default_datetime, _} = DateTime.from_iso8601("2019-05-01T06:25:00-0700")
       ...> schema = %{
@@ -57,10 +47,10 @@ defmodule Litmus.Type.DateTime do
   @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
-         {:ok, data} <- Default.validate(type, field, data),
          {:ok, data} <- convert(type, field, data) do
       {:ok, data}
     else
+      {:ok_not_present, data} -> Default.validate(type, field, data)
       {:error, msg} -> {:error, msg}
     end
   end
@@ -68,9 +58,6 @@ defmodule Litmus.Type.DateTime do
   @spec convert(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp convert(%__MODULE__{}, field, params) do
     cond do
-      !Map.has_key?(params, field) ->
-        {:ok, params}
-
       params[field] == nil ->
         {:ok, params}
 

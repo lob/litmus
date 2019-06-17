@@ -44,10 +44,9 @@ defmodule Litmus.Type.Any do
 
   @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
-    with {:ok, data} <- Required.validate(type, field, data),
-         {:ok, data} <- Default.validate(type, field, data) do
-      {:ok, data}
-    else
+    case Required.validate(type, field, data) do
+      {:ok, data} -> {:ok, data}
+      {:ok_not_present, data} -> Default.validate(type, field, data)
       {:error, msg} -> {:error, msg}
     end
   end

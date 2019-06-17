@@ -69,10 +69,10 @@ defmodule Litmus.Type.Boolean do
   @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
-         {:ok, data} <- Default.validate(type, field, data),
          {:ok, data} <- truthy_falsy_validate(type, field, data) do
       {:ok, data}
     else
+      {:ok_not_present, data} -> Default.validate(type, field, data)
       {:error, msg} -> {:error, msg}
     end
   end
@@ -100,9 +100,6 @@ defmodule Litmus.Type.Boolean do
   @spec truthy_falsy_validate(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp truthy_falsy_validate(%__MODULE__{falsy: falsy, truthy: truthy}, field, params) do
     cond do
-      !Map.has_key?(params, field) ->
-        {:ok, params}
-
       params[field] == nil ->
         {:ok, params}
 

@@ -88,6 +88,17 @@ defmodule Litmus.Type.StringTest do
                {:error,
                 "#{field} length must be greater than or equal to #{min_length} characters"}
     end
+
+    test "does not error if the field is not provided and not required" do
+      field = "id"
+      data = %{}
+
+      type = %Type.String{
+        min_length: 3
+      }
+
+      assert Type.String.validate_field(type, field, data) == {:ok, data}
+    end
   end
 
   describe "maximum length validation" do

@@ -24,6 +24,17 @@ defmodule Litmus.Type.BooleanTest do
 
       assert Type.Boolean.validate_field(type, field, data) == {:ok, data}
     end
+
+    test "does not error if the field is not provided and not required" do
+      field = "id"
+      data = %{}
+
+      type = %Type.Boolean{
+        truthy: [1, "One"]
+      }
+
+      assert Type.Boolean.validate_field(type, field, data) == {:ok, data}
+    end
   end
 
   describe "truthy validation" do

@@ -15,5 +15,14 @@ defmodule Litmus.Type.AnyTest do
 
       assert Type.Any.validate_field(type, field, data) == {:ok, data}
     end
+
+    test "does not error if the field is not provided and not required" do
+      field = "id"
+      data = %{}
+
+      type = %Type.Any{}
+
+      assert Type.Any.validate_field(type, field, data) == {:ok, data}
+    end
   end
 end

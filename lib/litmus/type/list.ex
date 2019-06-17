@@ -73,7 +73,6 @@ defmodule Litmus.Type.List do
   @spec validate_field(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   def validate_field(type, field, data) do
     with {:ok, data} <- Required.validate(type, field, data),
-         {:ok, data} <- Default.validate(type, field, data),
          {:ok, data} <- validate_list(type, field, data),
          {:ok, data} <- type_validate(type, field, data),
          {:ok, data} <- min_length_validate(type, field, data),
@@ -81,6 +80,7 @@ defmodule Litmus.Type.List do
          {:ok, data} <- length_validate(type, field, data) do
       {:ok, data}
     else
+      {:ok_not_present, data} -> Default.validate(type, field, data)
       {:error, msg} -> {:error, msg}
     end
   end
@@ -88,9 +88,6 @@ defmodule Litmus.Type.List do
   @spec validate_list(t, String.t(), map) :: {:ok, map} | {:error, String.t()}
   defp validate_list(%__MODULE__{}, field, params) do
     cond do
-      !Map.has_key?(params, field) ->
-        {:ok, params}
-
       params[field] == nil ->
         {:ok, params}
 
@@ -109,7 +106,7 @@ defmodule Litmus.Type.List do
 
   defp min_length_validate(%__MODULE__{min_length: min_length}, field, params)
        when is_integer(min_length) and min_length >= 0 do
-    if Map.has_key?(params, field) && length(params[field]) < min_length do
+    if length(params[field]) < min_length do
       {:error, "#{field} must not be below length of #{min_length}"}
     else
       {:ok, params}
@@ -123,7 +120,7 @@ defmodule Litmus.Type.List do
 
   defp max_length_validate(%__MODULE__{max_length: max_length}, field, params)
        when is_integer(max_length) and max_length >= 0 do
-    if Map.has_key?(params, field) && length(params[field]) > max_length do
+    if length(params[field]) > max_length do
       {:error, "#{field} must not exceed length of #{max_length}"}
     else
       {:ok, params}
@@ -137,7 +134,7 @@ defmodule Litmus.Type.List do
 
   defp length_validate(%__MODULE__{length: length}, field, params)
        when is_integer(length) and length >= 0 do
-    if Map.has_key?(params, field) && length(params[field]) != length do
+    if length(params[field]) != length do
       {:error, "#{field} length must be of #{length} length"}
     else
       {:ok, params}
