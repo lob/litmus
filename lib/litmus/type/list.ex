@@ -25,6 +25,9 @@ defmodule Litmus.Type.List do
       are are atoms `:atom, :boolean, :number and :string`. Default value is `nil`.
       If `nil`, any element type is allowed in the list.
 
+    * `:unique` - Setting `:unique` to true will validate that all values in
+      the list are unique. The default value is `false`.
+
   ## Examples
 
       iex> schema = %{
@@ -58,7 +61,8 @@ defmodule Litmus.Type.List do
     :length,
     :type,
     default: Litmus.Type.Any.NoDefault,
-    required: false
+    required: false,
+    unique: false
   ]
 
   @type t :: %__MODULE__{
@@ -67,7 +71,8 @@ defmodule Litmus.Type.List do
           max_length: non_neg_integer | nil,
           length: non_neg_integer | nil,
           type: atom | nil,
-          required: boolean
+          required: boolean,
+          unique: boolean
         }
 
   @spec validate_field(t, term, map) :: {:ok, map} | {:error, String.t()}
@@ -77,7 +82,8 @@ defmodule Litmus.Type.List do
          {:ok, data} <- type_validate(type, field, data),
          {:ok, data} <- min_length_validate(type, field, data),
          {:ok, data} <- max_length_validate(type, field, data),
-         {:ok, data} <- length_validate(type, field, data) do
+         {:ok, data} <- length_validate(type, field, data),
+         {:ok, data} <- unique_validate(type, field, data) do
       {:ok, data}
     else
       {:ok_not_present, data} -> Default.validate(type, field, data)
@@ -188,6 +194,31 @@ defmodule Litmus.Type.List do
       {:ok, params}
     else
       {:error, "#{field} must be a list of strings"}
+    end
+  end
+
+  @spec unique_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
+  defp unique_validate(%__MODULE__{unique: false}, _field, params) do
+    {:ok, params}
+  end
+
+  defp unique_validate(%__MODULE__{unique: true}, field, params) do
+    list = params[field]
+
+    if uniq?(list, %{}) do
+      {:ok, params}
+    else
+      {:error, "#{field} cannot contain duplicate values"}
+    end
+  end
+
+  @spec uniq?([term], map) :: boolean
+  defp uniq?([], _set), do: true
+
+  defp uniq?([head | tail], set) do
+    case set do
+      %{^head => true} -> false
+      %{} -> uniq?(tail, Map.put(set, head, true))
     end
   end
 
