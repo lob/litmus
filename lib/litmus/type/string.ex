@@ -82,6 +82,14 @@ defmodule Litmus.Type.String do
       iex> Litmus.validate(%{}, schema)
       {:ok, %{"username" => "anonymous"}}
 
+      iex> schema = %{
+      ...>   "username" => %Litmus.Type.String{
+      ...>     included: ["user1", "user2"]
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{"username" => "user1"}, schema)
+      {:ok, %{"username" => "user1"}}
+
   """
 
   alias Litmus.{Default, Required}
