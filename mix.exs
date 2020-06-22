@@ -57,7 +57,7 @@ defmodule Litmus.MixProject do
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: :test},
-      {:plug, ">= 1.8.0", optional: true},
+      {:plug, "~> 1.8", optional: true},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
