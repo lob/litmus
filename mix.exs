@@ -54,11 +54,11 @@ defmodule Litmus.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.20.2", only: :dev, runtime: false},
-      {:credo, "~> 1.0.5", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.11", only: :test},
       {:plug, ">= 1.8.0", optional: true},
-      {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 end
