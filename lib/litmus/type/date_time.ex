@@ -18,8 +18,8 @@ defmodule Litmus.Type.DateTime do
 
       iex> schema = %{"start_date" => %Litmus.Type.DateTime{}}
       iex> {:ok, %{"start_date" => datetime}} = Litmus.validate(%{"start_date" => "2017-06-18T05:45:33Z"}, schema)
-      iex> datetime
-      #DateTime<2017-06-18 05:45:33Z>
+      iex> DateTime.to_iso8601(datetime)
+      "2017-06-18T05:45:33Z"
 
       iex> {:ok, default_datetime, _} = DateTime.from_iso8601("2019-05-01T06:25:00-0700")
       ...> schema = %{
@@ -28,8 +28,8 @@ defmodule Litmus.Type.DateTime do
       ...>   }
       ...> }
       iex> {:ok, %{"start_date" => datetime}} = Litmus.validate(%{}, schema)
-      iex> datetime
-      #DateTime<2019-05-01 13:25:00Z>
+      iex> DateTime.to_iso8601(datetime)
+      "2019-05-01T13:25:00Z"
 
   """
 
