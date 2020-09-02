@@ -1,3 +1,7 @@
+### 1.0.1 (2020-09-02)
+
+* **dependencies:** Upgraded dependencies ([#23](https://github.com/lob/litmus/pull/31))
+
 ### 1.0.0 (2019-06-17)
 
 ##### New Features
