@@ -319,6 +319,34 @@ defmodule Litmus.Type.StringTest do
     end
   end
 
+  describe "included in list validation" do
+    test "returns :ok when field is in list" do
+      list = ["carlos", "benit", "ruben"]
+      data = %{"name" => "benit"}
+
+      schema = %{
+        "name" => %Litmus.Type.String{
+          required: true,
+          included: list
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:ok, data}
+    end
+
+    test "returns :error when the value is not in list" do
+      data = %{"name" => nil}
+
+      schema = %{
+        "name" => %Litmus.Type.String{
+          included: ["carlos", "benit", "ruben"]
+        }
+      }
+
+      assert Litmus.validate(data, schema) == {:error, "name isn't into the list."}
+    end
+  end
+
   describe "trim extra whitespaces" do
     test "returns :ok with new parameters having trimmed values when trim is set to true" do
       data = %{"id" => " abc "}

@@ -39,6 +39,8 @@ defmodule Litmus.Type.String do
     * `:trim` - Removes additional whitespace at the front and end of a string.
       Allowed values are `true` and `false`. The default is `false`.
 
+    * `:included` - Specifies a option list.
+
   ## Examples
 
       iex> schema = %{
@@ -80,6 +82,14 @@ defmodule Litmus.Type.String do
       iex> Litmus.validate(%{}, schema)
       {:ok, %{"username" => "anonymous"}}
 
+      iex> schema = %{
+      ...>   "username" => %Litmus.Type.String{
+      ...>     included: ["user1", "user2"]
+      ...>   }
+      ...> }
+      iex> Litmus.validate(%{"username" => "user1"}, schema)
+      {:ok, %{"username" => "user1"}}
+
   """
 
   alias Litmus.{Default, Required}
@@ -89,6 +99,7 @@ defmodule Litmus.Type.String do
     :min_length,
     :max_length,
     :length,
+    :included,
     default: Litmus.Type.Any.NoDefault,
     regex: %Type.String.Regex{},
     replace: %Type.String.Replace{},
@@ -104,7 +115,8 @@ defmodule Litmus.Type.String do
           regex: Type.String.Regex.t(),
           replace: Type.String.Replace.t(),
           trim: boolean,
-          required: boolean
+          required: boolean,
+          included: list
         }
 
   @spec validate_field(t, term, map) :: {:ok, map} | {:error, String.t()}
@@ -116,7 +128,8 @@ defmodule Litmus.Type.String do
          {:ok, data} <- max_length_validate(type, field, data),
          {:ok, data} <- length_validate(type, field, data),
          {:ok, data} <- regex_validate(type, field, data),
-         {:ok, data} <- replace(type, field, data) do
+         {:ok, data} <- replace(type, field, data),
+         {:ok, data} <- included(type, field, data) do
       {:ok, data}
     else
       {:ok_not_present, data} -> Default.validate(type, field, data)
@@ -153,6 +166,19 @@ defmodule Litmus.Type.String do
 
   defp min_length_validate(%__MODULE__{}, _field, params) do
     {:ok, params}
+  end
+
+  @spec included(t, term, map) :: {:ok, map} | {:error, String.t()}
+  defp included(%__MODULE__{included: nil}, _field, params) do
+    {:ok, params}
+  end
+
+  defp included(%__MODULE__{included: included}, field, params) do
+    if Map.get(params, field) in included do
+      {:ok, params}
+    else
+      {:error, "#{field} isn't into the list."}
+    end
   end
 
   @spec max_length_validate(t, term, map) :: {:ok, map} | {:error, String.t()}
