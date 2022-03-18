@@ -20,8 +20,8 @@ jobs:
       - name: Set up elixir
         uses: erlef/setup-beam@v1
         with:
-          otp-version: 20.0
-          elixir-version: 1.10
+          otp-version: 21.0
+          elixir-version: 1.8
           rebar3-version: 3.11
 
       - name: Install System Dependencies
