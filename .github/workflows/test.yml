@@ -1,0 +1,115 @@
+name: Test
+
+on: push
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      ImageOS: ubuntu20
+      MIX_ENV: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Setup elixir/erlang
+      - name: Set up elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 21.0
+          elixir-version: 1.8
+          rebar3-version: 3.14.2
+
+      - name: Install System Dependencies
+        shell: bash
+        run: |
+          mix local.hex --force
+          mix deps.get
+          mix compile --warnings-as-errors
+
+      - name: Run tests and enforce coverage
+        env:
+          ELASTIC_HOST_V2: "${{ secrets.ELASTIC_HOST_V2 }}"
+          ELASTIC_PASSWORD: "${{ secrets.ELASTIC_PASSWORD }}"
+          MIX_ENV: test
+        run: mix coveralls.html --max-cases 1
+        
+      - name: Compress coverage directory
+        if: failure()
+        shell: bash
+        run: test -d cover && tar czvf ~/cover.tar.gz cover
+
+      - name: Archive code coverage results
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: ~/cover.tar.gz
+
+  lint-and-format:
+    name: Lint and Format
+    runs-on: ubuntu-latest
+    env:
+      ImageOS: ubuntu20
+      MIX_ENV: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Setup elixir/erlang
+      - name: Set up elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 21.0
+          elixir-version: 1.8
+          rebar3-version: 3.14.2
+
+      - name: Install System Dependencies
+        shell: bash
+        run: |
+          mix local.hex --force
+          mix deps.get
+          mix compile --warnings-as-errors
+
+      - name: Run linter
+        shell: bash
+        run: mix credo
+
+      - name: Run formatter
+        shell: bash 
+        run: mix format --check-formatted --dry-run
+
+  dialyzer:
+    name: Dialyzer
+    runs-on: ubuntu-latest
+    env:
+      ImageOS: ubuntu20
+      MIX_ENV: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Setup elixir/erlang
+      - name: Set up elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 21.0
+          elixir-version: 1.8
+          rebar3-version: 3.14.2
+
+      - name: Install System Dependencies
+        shell: bash
+        run: |
+          mix local.hex --force
+          mix deps.get
+          mix compile --warnings-as-errors
+
+      - name: Run dialyzer
+        shell: bash 
+        run : mix dialyzer --halt-exit-status
+     
+
