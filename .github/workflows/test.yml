@@ -20,7 +20,7 @@ jobs:
       - name: Set up elixir
         uses: erlef/setup-beam@v1
         with:
-          otp-version: 21.0
+          otp-version: 20.0
           elixir-version: 1.10
           rebar3-version: 3.14.3
 
