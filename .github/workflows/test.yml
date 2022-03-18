@@ -5,14 +5,12 @@ on: push
 jobs:
   test:
     name: Test
-    # Running on Lob's Private Github Runners
     runs-on: ubuntu-latest
     env:
       ImageOS: ubuntu20
       MIX_ENV: test
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v2
 
