@@ -6,7 +6,7 @@ jobs:
   test:
     name: Test
     # Running on Lob's Private Github Runners
-    runs-on: [self-hosted, Linux, x64, lob-runner]
+    runs-on: ubuntu-latest
     env:
       ImageOS: ubuntu20
       MIX_ENV: test
@@ -15,20 +15,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Checkout Lob Private Actions
-        uses: actions/checkout@v2
-        with:
-          repository: lob/github-actions
-          ref: main
-          token: "${{ secrets.PRIVATE_GITHUB_ACTION_TOKEN }}"
-          path: ./.github/lob
-
-      - name: Assume Role
-        uses: "./.github/lob/actions/assume-role"
-        with:
-          assume_role_arn: 'arn:aws:iam::561067527460:role/ci-cross/dora'
-          role_session_name: dora-assumed
 
       # Setup elixir/erlang
       - name: Set up elixir
