@@ -14,7 +14,7 @@ The package can be installed by adding `litmus` to your list of dependencies in
 ```elixir
 def deps do
   [
-    {:litmus, "~> 1.0.1"}
+    {:litmus, "~> 1.0.2"}
   ]
 end
 ```
