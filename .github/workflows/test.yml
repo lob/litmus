@@ -81,9 +81,9 @@ jobs:
       - name: Run formatter
         shell: bash 
         run: mix format --check-formatted --dry-run
-        
+
   dialyzer:
-    name: Lint and Format
+    name: Dialyzer
     runs-on: ubuntu-latest
     env:
       ImageOS: ubuntu20
