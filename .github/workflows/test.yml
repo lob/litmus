@@ -1,0 +1,76 @@
+name: Test
+
+on: push
+
+jobs:
+  test:
+    name: Test
+    # Running on Lob's Private Github Runners
+    runs-on: [self-hosted, Linux, x64, lob-runner]
+    env:
+      ImageOS: ubuntu20
+      MIX_ENV: test
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Checkout Lob Private Actions
+        uses: actions/checkout@v2
+        with:
+          repository: lob/github-actions
+          ref: main
+          token: "${{ secrets.PRIVATE_GITHUB_ACTION_TOKEN }}"
+          path: ./.github/lob
+
+      - name: Assume Role
+        uses: "./.github/lob/actions/assume-role"
+        with:
+          assume_role_arn: 'arn:aws:iam::561067527460:role/ci-cross/dora'
+          role_session_name: dora-assumed
+
+      # Setup elixir/erlang
+      - name: Set up elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 21.0
+          elixir-version: 1.10
+
+      - name: Install System Dependencies
+        shell: bash
+        run: |
+          mix local.hex --force
+          mix deps.get
+          mix compile --warnings-as-errors
+
+      - name: Run tests and enforce coverage
+        env:
+          ELASTIC_HOST_V2: "${{ secrets.ELASTIC_HOST_V2 }}"
+          ELASTIC_PASSWORD: "${{ secrets.ELASTIC_PASSWORD }}"
+          MIX_ENV: ci
+        run: mix coveralls.html --max-cases 1
+        
+      - name: Compress coverage directory
+        if: failure()
+        shell: bash
+        run: test -d cover && tar czvf ~/cover.tar.gz cover
+
+      - name: Archive code coverage results
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: ~/cover.tar.gz
+
+      - name: Run linter
+        shell: bash
+        run: mix credo
+
+      - name: Run dialyzer
+        shell: bash 
+        run : mix dialyzer --halt-exit-status
+      
+      - name: Run formatter
+        shell: bash 
+        run: mix format --check-formatted --dry-run
