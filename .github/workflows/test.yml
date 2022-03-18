@@ -48,14 +48,68 @@ jobs:
           name: code-coverage-report
           path: ~/cover.tar.gz
 
+  lint-and-format:
+    name: Lint and Format
+    runs-on: ubuntu-latest
+    env:
+      ImageOS: ubuntu20
+      MIX_ENV: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Setup elixir/erlang
+      - name: Set up elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 21.0
+          elixir-version: 1.8
+          rebar3-version: 3.14.2
+
+      - name: Install System Dependencies
+        shell: bash
+        run: |
+          mix local.hex --force
+          mix deps.get
+          mix compile --warnings-as-errors
+
       - name: Run linter
         shell: bash
         run: mix credo
 
-      - name: Run dialyzer
-        shell: bash 
-        run : mix dialyzer --halt-exit-status
-      
       - name: Run formatter
         shell: bash 
         run: mix format --check-formatted --dry-run
+        
+  dialyzer:
+    name: Lint and Format
+    runs-on: ubuntu-latest
+    env:
+      ImageOS: ubuntu20
+      MIX_ENV: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Setup elixir/erlang
+      - name: Set up elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 21.0
+          elixir-version: 1.8
+          rebar3-version: 3.14.2
+
+      - name: Install System Dependencies
+        shell: bash
+        run: |
+          mix local.hex --force
+          mix deps.get
+          mix compile --warnings-as-errors
+
+      - name: Run dialyzer
+        shell: bash 
+        run : mix dialyzer --halt-exit-status
+     
+
