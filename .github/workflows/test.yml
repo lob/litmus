@@ -36,7 +36,7 @@ jobs:
           ELASTIC_HOST_V2: "${{ secrets.ELASTIC_HOST_V2 }}"
           ELASTIC_PASSWORD: "${{ secrets.ELASTIC_PASSWORD }}"
           MIX_ENV: test
-        run: coveralls.html --max-cases 1
+        run: mix coveralls.html --max-cases 1
         
       - name: Compress coverage directory
         if: failure()
