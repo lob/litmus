@@ -22,7 +22,7 @@ jobs:
         with:
           otp-version: 20.0
           elixir-version: 1.10
-          rebar3-version: 3.14.3
+          rebar3-version: 3.11
 
       - name: Install System Dependencies
         shell: bash
